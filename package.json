@@ -1,0 +1,19 @@
+{
+  "name": "rod-bargayo-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Rod Bargayo portfolio built with Next.js. Contact form sends through Hostinger Email.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
