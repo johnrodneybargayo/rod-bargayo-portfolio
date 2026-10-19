@@ -5,7 +5,7 @@ import Modal from "./Modal";
 import { BtnIsland, Icon } from "./Icons";
 import { SITE } from "@/lib/data";
 
-const EMPTY = { name: "", email: "", project: "", message: "", website: "" };
+const EMPTY = { name: "", email: "", project: "", message: "", website: "", subscribe: false };
 
 const RULES = {
     name: v => (v.trim() ? "" : "Please add your name."),
@@ -47,7 +47,7 @@ export default function ContactModal({ open, project, onClose }) {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { Accept: "application/json" },
-                body: new URLSearchParams({ ...values, started: String(started.current) })
+                body: new URLSearchParams({ ...values, subscribe: values.subscribe ? "yes" : "", started: String(started.current) })
             });
             const json = await res.json().catch(() => null);
             if (res.ok && json?.ok) {
@@ -105,6 +105,11 @@ export default function ContactModal({ open, project, onClose }) {
                             <input id="jrm-project" type="text" placeholder="Website, plugin, automation or something new" value={values.project} onChange={set("project")} />)}
                         {field("message", "Message",
                             <textarea ref={refs.message} id="jrm-message" placeholder="What would you like to make better?" value={values.message} onChange={set("message")} aria-invalid={!!errors.message} />)}
+
+                        <label className="jrm-check" htmlFor="jrm-subscribe">
+                            <input id="jrm-subscribe" type="checkbox" checked={values.subscribe} onChange={e => setValues(v => ({ ...v, subscribe: e.target.checked }))} />
+                            <span>Send me occasional updates about new work. Unsubscribe any time.</span>
+                        </label>
 
                         <p className={`jrm-status${state === "error" ? " is-error" : ""}`} aria-live="polite">
                             {state === "error" && (

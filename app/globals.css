@@ -2271,6 +2271,10 @@ img.is-broken { visibility: hidden; }
 .jrm-project-body .jrm-actions { justify-content: flex-end; flex-wrap: wrap; }
 .jrm-status { margin: 0; min-height: 16px; color: #0b7f8a; font-size: 12px; }
 
+.jrm-check { display: flex; align-items: flex-start; gap: 10px; color: #3d5676; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.jrm-check input { flex: none; width: 17px; height: 17px; margin: 2px 0 0; accent-color: #2453a6; cursor: pointer; }
+.jrm-check input:focus-visible { outline: 2px solid #2453a6; outline-offset: 2px; }
+
 /* Project preview: browser window with the real page */
 
 .jrm-dialog-project {

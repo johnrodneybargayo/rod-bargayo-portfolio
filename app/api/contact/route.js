@@ -1,6 +1,12 @@
+import { brevoConfig, brevoSend, brevoSubscribe } from "@/lib/brevo";
 import { smtpConfig, smtpSend } from "@/lib/smtp";
 
-/* SMTP needs Node's tls module, so this route runs on the Node.js runtime */
+/*
+ * Email provider is picked from environment variables:
+ *   BREVO_API_KEY + MAIL_FROM + MAIL_TO  ->  Brevo HTTP API (free: 300/day)
+ *   SMTP_USER + SMTP_PASS                 ->  Hostinger Email over SMTP (fallback)
+ * The SMTP fallback needs Node's tls module, so this route runs on Node.js.
+ */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -27,9 +33,15 @@ export async function POST(request) {
         if (originHost !== host) return json(403, { ok: false, error: "This form can only be sent from the website." });
     }
 
-    const cfg = smtpConfig();
-    if (!cfg.user || !cfg.pass) {
-        console.error("contact: SMTP_USER / SMTP_PASS environment variables are not set");
+    const brevo = brevoConfig();
+    const smtp = smtpConfig();
+    const provider = brevo.apiKey ? "brevo" : smtp.user && smtp.pass ? "smtp" : null;
+    if (!provider) {
+        console.error("contact: no email provider configured (set BREVO_API_KEY, MAIL_FROM, MAIL_TO)");
+        return json(500, { ok: false, error: "The form is not set up yet." });
+    }
+    if (provider === "brevo" && (!brevo.from || !brevo.to)) {
+        console.error("contact: BREVO_API_KEY is set but MAIL_FROM / MAIL_TO are missing");
         return json(500, { ok: false, error: "The form is not set up yet." });
     }
 
@@ -78,16 +90,29 @@ export async function POST(request) {
         message.replace(/\r\n?/g, "\n")
     ].join("\n");
 
+    const mail = {
+        subject: `[Portfolio] ${project || "New project inquiry"} from ${name}`,
+        text,
+        replyTo: email,
+        replyName: name
+    };
+
     try {
-        await smtpSend(cfg, {
-            subject: `[Portfolio] ${project || "New project inquiry"} from ${name}`,
-            text,
-            replyTo: email,
-            replyName: name
-        });
+        if (provider === "brevo") await brevoSend(brevo, mail);
+        else await smtpSend(smtp, mail);
     } catch (err) {
-        console.error("contact SMTP error:", err.message);
+        console.error(`contact ${provider} error:`, err.message);
         return json(502, { ok: false, error: "Sorry, the message couldn't be sent right now." });
+    }
+
+    /* Opt-in: add the visitor to the Brevo list used for campaigns (BREVO_LIST_ID).
+       Never blocks the message; a failure is only logged. */
+    if (body.subscribe === "yes" && brevo.apiKey) {
+        try {
+            await brevoSubscribe(brevo, { email, name });
+        } catch (err) {
+            console.error("contact brevo subscribe error:", err.message);
+        }
     }
 
     recent.push(now);

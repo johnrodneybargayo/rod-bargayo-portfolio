@@ -2,11 +2,12 @@
   "name": "rod-bargayo-portfolio",
   "version": "2.0.0",
   "private": true,
-  "description": "Rod Bargayo portfolio built with Next.js. Contact form sends through Hostinger Email.",
+  "description": "Rod Bargayo portfolio built with Next.js. Contact form and email campaigns through Brevo.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "campaign": "node scripts/brevo-campaign.mjs"
   },
   "dependencies": {
     "next": "16.4.2",
