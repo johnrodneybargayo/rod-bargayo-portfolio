@@ -270,7 +270,7 @@ export default function Portfolio() {
             </div>
 
             {(ready || project) && <ProjectModal project={project} onClose={closeProject} onContact={name => { closeProject(); setTimeout(() => openContact(name), 220); }} />}
-            {ready && <ChatWidget ready={ready} go={go} openContact={openContact} />}
+            {ready && <ChatWidget ready={ready} go={go} openContact={openContact} section={index} />}
             {(ready || contact.open) && <ContactModal open={contact.open} project={contact.project} message={contact.message} onClose={closeContact} />}
         </>
     );
