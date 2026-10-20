@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, SITE } from "@/lib/data";
 import { Icon, BtnIsland } from "./Icons";
 import { ImageGate } from "./ImageGate";
+import ChatButton from "./ChatButton";
 import Overview from "./sections/Overview";
 import Expertise from "./sections/Expertise";
 import Work from "./sections/Work";
@@ -269,6 +270,7 @@ export default function Portfolio() {
             </div>
 
             {(ready || project) && <ProjectModal project={project} onClose={closeProject} onContact={name => { closeProject(); setTimeout(() => openContact(name), 220); }} />}
+            <ChatButton ready={ready} />
             {(ready || contact.open) && <ContactModal open={contact.open} project={contact.project} onClose={closeContact} />}
         </>
     );

@@ -125,6 +125,21 @@ WebP, about 125 KB). To replace it, export a transparent cutout cropped tight to
 the subject, about 960px wide, as WebP with alpha, and keep the same file name.
 If the file is missing, the section shows your profile photo in an arch frame.
 
+## Live chat (Brevo Conversations)
+
+1. In Brevo, open **Conversations** and finish the setup. Under **Settings > Widget**,
+   copy the `BrevoConversationsID` from the install code. Pick the widget language there too.
+2. In Vercel, add `NEXT_PUBLIC_BREVO_CONVERSATIONS_ID` with that ID, then redeploy.
+   (Variables starting with `NEXT_PUBLIC_` are built into the page, so a redeploy is required.)
+
+The yellow **Chat** button appears bottom right. Brevo's script only loads after the
+visitor's first interaction (or when they press the button), so it doesn't affect
+page speed. Reply from Brevo's web inbox or the Brevo mobile app.
+
+If Brevo's install code shows a different script address than
+`https://conversations-widget.brevo.com/brevo-conversations.js`, set it in
+`NEXT_PUBLIC_BREVO_CONVERSATIONS_SRC`.
+
 ## Contact form protection
 
 - Hidden honeypot field: bots that fill it get a fake success; nothing is sent.
