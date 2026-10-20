@@ -41,6 +41,8 @@ export default function Portfolio() {
     const [instant, setInstant] = useState(false);
     const [contact, setContact] = useState({ open: false, project: "" });
     const [project, setProject] = useState(null);
+    /* curtain that sweeps across while the track slides; shows where you're going */
+    const [wipe, setWipe] = useState(null);
 
     const indexRef = useRef(0);
     const busy = useRef(false);
@@ -51,6 +53,7 @@ export default function Portfolio() {
     const go = useCallback(i => {
         if (!Number.isInteger(i) || i < 0 || i >= SECTIONS.length || i === indexRef.current || busy.current) return;
         busy.current = true;
+        if (!reduced.current) setWipe({ n: Date.now(), dir: i > indexRef.current ? "next" : "prev", num: i + 1, label: SECTIONS[i].name });
         indexRef.current = i;
         setIndex(i);
         const scroller = document.querySelectorAll(".jr-section-scroll")[i];
@@ -229,6 +232,12 @@ export default function Portfolio() {
                             <Section index={4} active={index === 4} go={go}><About {...sectionProps} /></Section>
                             <Section index={5} active={index === 5} go={go}><Contact {...sectionProps} /></Section>
                         </div>
+                        {wipe && (
+                            <div key={wipe.n} className={`jr-wipe is-${wipe.dir}`} aria-hidden="true" onAnimationEnd={e => { if (e.target === e.currentTarget) setWipe(null); }}>
+                                <span className="jr-wipe-num">{String(wipe.num).padStart(2, "0")} / {String(SECTIONS.length).padStart(2, "0")}</span>
+                                <span className="jr-wipe-label">{wipe.label}</span>
+                            </div>
+                        )}
                     </div>
                 </main>
 
