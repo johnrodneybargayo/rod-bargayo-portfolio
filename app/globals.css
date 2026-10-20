@@ -3211,45 +3211,172 @@ button[disabled].jr-btn { opacity: .65; cursor: progress; }
 .jrx-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* make room in the pager row for the launcher */
-body:has(.jrx) .jr-pager { padding-right: 96px; }
+body:has(.jrx) .jr-pager { padding-right: 300px; }
 
 /* ---------- launcher ---------- */
 .jrx-launch {
     position: fixed;
     z-index: 75;
-    right: 18px;
-    bottom: 8px;
+    right: 22px;
+    bottom: 14px;
     display: flex;
     align-items: flex-end;
-    gap: 2px;
     pointer-events: none;
 }
 
 .jrx-launch > * { pointer-events: auto; }
 
 .jrx-launch-btn {
-    padding: 0;
-    border: 0;
-    background: none;
+    display: flex;
+    align-items: center;
+    min-height: 66px;
+    padding: 10px 116px 10px 18px;
+    border: 1px solid #cfe6f6;
+    border-radius: 22px;
+    color: #102a57;
+    background: linear-gradient(135deg, #ffffff 0%, #eef7fe 100%);
+    box-shadow: 0 2px 4px rgba(16,42,87,.06), 0 16px 34px rgba(18,74,152,.22);
+    font: inherit;
+    text-align: left;
     cursor: pointer;
-    border-radius: 18px;
+    transition: transform .22s ease-out, box-shadow .22s ease-out, border-color .22s ease-out;
 }
 
+.jrx-launch-btn:hover { transform: translateY(-2px); border-color: #9fd2ee; box-shadow: 0 2px 4px rgba(16,42,87,.08), 0 20px 40px rgba(18,74,152,.28); }
+.jrx-launch-btn.has-unread { border-color: #ffd936; box-shadow: 0 0 0 3px rgba(255,217,54,.45), 0 16px 34px rgba(18,74,152,.24); }
+
+.jrx-launch-text { display: grid; gap: 3px; white-space: nowrap; }
+.jrx-launch-text strong { font-size: 15px; letter-spacing: -.01em; }
+.jrx-launch-text span { display: inline-flex; align-items: center; gap: 6px; color: #58708d; font-size: 12px; }
+.jrx-online { width: 8px; height: 8px; border-radius: 50%; background: #22c58b; box-shadow: 0 0 0 3px rgba(34,197,139,.18); animation: jrx-online 2s ease-in-out infinite; }
+@keyframes jrx-online { 50% { box-shadow: 0 0 0 6px rgba(34,197,139,0); } }
+
 .jrx-launch-btn:focus-visible { outline: 3px solid #2453a6; outline-offset: 4px; }
+.jrx.is-open .jrx-walk { opacity: 0; pointer-events: none; transition: opacity .25s ease-out; }
+.jrx.is-open .jrx-launch-btn { padding-right: 18px; }
 
 .jrx-launch-btn { position: relative; }
 
 /* poses stacked; the active one is shown. The wrapper breathes and sways all the time */
 .jrx-launch-body {
-    position: relative;
+    position: absolute;
+    inset: 0;
     display: block;
-    width: 84px;
-    height: 130px;
+    transition: opacity .25s ease-out;
     transform-origin: 50% 100%;
+    /* breathing starts once he has walked in, so nothing bounces during the walk */
+    animation: jrx-breathe 3.2s ease-in-out 2s infinite;
+}
+
+.jrx-launch-body.is-hop {
     animation: jrx-hop .55s cubic-bezier(.34,1.56,.64,1) both, jrx-breathe 3.2s ease-in-out .55s infinite;
 }
 
-.jrx-launch-btn:hover .jrx-launch-body { animation: jrx-wiggle .7s ease-in-out infinite; }
+.jrx-launch-btn:hover .jrx-rig-arm { animation: jrx-armwave-fast .9s ease-in-out infinite; }
+@keyframes jrx-hello { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* ---------- the rig (wave pose in moving parts) ---------- */
+.jrx-rig { position: absolute; aspect-ratio: 260 / 400; }
+
+/* the mascot faces left, toward the page and the chat
+   (scale is separate from transform, so it doesn't fight the animations) */
+.jrx-sprite, .jrx-rig { scale: -1 1; }
+.jrx-rig > span { position: absolute; inset: 0; background-repeat: no-repeat; background-size: 100% 100%; }
+.jrx-rig-base { background-image: url("/mascot/stand.webp"); }
+
+/* floor shadow (drawn, so it stays put while the feet move) */
+.jrx-rig::before {
+    content: "";
+    position: absolute;
+    left: 22%;
+    right: 20%;
+    bottom: .6%;
+    height: 5.5%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(150,180,220,.55), rgba(150,180,220,0));
+    animation: jrx-shadow-walk 1.6s ease-in-out .2s both;
+}
+
+/* walk cycle: 4 frames (public/mascot/walk.webp), from the reference walk.
+   Shown while he walks in, then the standing pose takes over. */
+.jrx-rig > .jrx-rig-walk {
+    background-image: url("/mascot/walk.webp");
+    background-size: 400% 100%;
+    /* 2 full cycles during the 1.6s walk-in, then he stops on the last frame */
+    /* walks for 1.6s (2 full strides), stands for 6.4s, then walks again - forever */
+    animation: jrx-cycle .8s steps(4) .2s infinite, jrx-walk-show 8s .2s infinite both;
+}
+
+.jrx-rig-base { animation: jrx-stand-show 8s .2s infinite both; }
+
+@keyframes jrx-cycle { from { background-position: 0 0; } to { background-position: 133.3333% 0; } }
+@keyframes jrx-walk-show { 0%, 19.9% { opacity: 1; } 20%, 100% { opacity: 0; } }
+@keyframes jrx-stand-show { 0%, 19.9% { opacity: 0; } 20%, 100% { opacity: 1; } }
+
+@keyframes jrx-shadow-walk {
+    from, to { transform: none; opacity: 1; }
+}
+
+
+/* hover: walking on the spot while waving */
+.jrx-launch-btn:hover .jrx-rig-walk { opacity: 1; animation: jrx-cycle .8s steps(4) infinite; }
+.jrx-launch-btn:hover .jrx-rig-base { opacity: 0; animation: none; }
+
+/* forearm swings from the elbow (194,214 in the 260x400 frame) */
+.jrx-rig-arm {
+    background-image: url("/mascot/wave-arm.webp");
+    transform-origin: 74.6% 53.5%;
+    animation: jrx-armwave 4.2s ease-in-out infinite;
+}
+
+@keyframes jrx-armwave {
+    0%, 55%, 100% { transform: rotate(0); }
+    62% { transform: rotate(-16deg); }
+    69% { transform: rotate(12deg); }
+    76% { transform: rotate(-14deg); }
+    83% { transform: rotate(10deg); }
+    90% { transform: rotate(-4deg); }
+}
+
+@keyframes jrx-armwave-fast {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(13deg); }
+}
+
+/* blink: eyes close for ~140ms, sometimes twice */
+.jrx-rig-blink {
+    background-image: url("/mascot/stand-blink.webp");
+    opacity: 0;
+    animation: jrx-blink 5.3s steps(1, end) infinite;
+}
+
+@keyframes jrx-blink {
+    0%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+    42.6% { opacity: 0; }
+    86% { opacity: 1; }
+    88.4% { opacity: 0; }
+    91.5% { opacity: 1; }
+    94% { opacity: 0; }
+}
+
+/* first appearance: walks in from the right with little steps */
+.jrx-walk {
+    position: absolute;
+    transform-origin: 50% 100%;
+    right: 6px;
+    bottom: 4px;
+    width: 108px;
+    height: 166px;
+    animation: jrx-walkin 1.6s linear .2s both;
+}
+
+@keyframes jrx-walkin {
+    0% { transform: translateX(140px); opacity: 0; }
+    6% { opacity: 1; }
+    100% { transform: none; opacity: 1; }
+}
+
 
 /* Mascot sprite: one image (public/mascot/sprite.webp), 6 poses side by side.
    --i picks the pose; each cell is 260x400. */
@@ -3263,7 +3390,7 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 
 .jrx-launch-sprite {
     position: absolute;
-    right: -6px;
+    right: 0;
     bottom: 0;
     height: 100%;
     filter: drop-shadow(0 10px 12px rgba(16,42,87,.22));
@@ -3272,9 +3399,9 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 /* unread replies from Rod */
 .jrx-badge {
     position: absolute;
-    top: 2px;
-    right: 0;
-    min-width: 22px;
+    top: -8px;
+    left: -8px;
+    min-width: 24px;
     height: 22px;
     padding: 0 6px;
     display: grid;
@@ -3290,6 +3417,9 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 
 @keyframes jrx-pulse { 50% { transform: scale(1.12); } }
 
+.jrx-say-from { display: block; margin-bottom: 2px; color: #1250a3; font-size: 12px; font-weight: 800; }
+.jrx-say-cta { display: block; margin-top: 6px; color: #2a74cc; font-size: 11.5px; font-weight: 700; }
+.jrx-say.is-sticky { box-shadow: 0 0 0 2px #ffd936, 0 14px 30px rgba(16,42,87,.22); }
 .jrx-say.is-sticky { animation: jrx-pop .45s cubic-bezier(.34,1.56,.64,1) both; }
 @keyframes jrx-pop { from { opacity: 0; transform: translateY(8px) scale(.85); } to { opacity: 1; transform: none; } }
 
@@ -3307,19 +3437,13 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
     100% { transform: translateY(0) scale(1, 1); }
 }
 
-@keyframes jrx-wiggle {
-    0%, 100% { transform: rotate(0); }
-    25% { transform: rotate(-4deg) translateY(-3px); }
-    75% { transform: rotate(4deg) translateY(-3px); }
-}
-
 /* speech bubble: what the mascot says */
 .jrx-say {
     position: absolute;
-    right: 70px;
-    bottom: 86px;
+    right: 104px;
+    bottom: 80px;
     width: max-content;
-    max-width: 230px;
+    max-width: 260px;
     padding: 10px 14px;
     border: 0;
     border-radius: 16px 16px 4px 16px;
@@ -3360,10 +3484,10 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 .jrx-panel {
     position: fixed;
     z-index: 76;
-    right: 24px;
-    bottom: 130px;
+    right: 22px;
+    bottom: 96px;
     width: min(410px, calc(100vw - 32px));
-    height: min(600px, calc(100vh - 160px));
+    height: min(620px, calc(100vh - 130px));
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -3482,16 +3606,59 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 .jrx-action-icon .jr-icon { width: 18px; height: 18px; }
 
 /* mascot stands at the bottom right of the conversation and swaps poses (sprite) */
-.jrx-mascot {
+.jrx-mascot-wrap {
     position: absolute;
     z-index: 0;
     right: 0;
     bottom: 78px;
     height: 250px;
+    aspect-ratio: 260 / 400;
     pointer-events: none;
+}
+
+.jrx-mascot {
+    height: 100%;
     animation: jrx-breathe 3.6s ease-in-out infinite;
     transform-origin: 50% 100%;
 }
+
+/* thinking: head tilts back and forth, a thought bubble with dots pops up */
+.jrx-mascot-wrap.is-thinking .jrx-mascot { animation: jrx-ponder 2.4s ease-in-out infinite; }
+@keyframes jrx-ponder {
+    0%, 100% { transform: rotate(0) translateY(0); }
+    30% { transform: rotate(-3deg) translateY(-2px); }
+    65% { transform: rotate(2.5deg) translateY(-1px); }
+}
+
+.jrx-thought {
+    position: absolute;
+    top: -34px;
+    right: 6px;
+    display: inline-flex;
+    gap: 4px;
+    padding: 9px 11px;
+    border-radius: 999px;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px #d3ebf7, 0 8px 18px rgba(16,42,87,.14);
+    opacity: 0;
+    transform: translateY(8px) scale(.7);
+    transition: opacity .2s ease-out, transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+
+.jrx-thought::before, .jrx-thought::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 0 1px #d3ebf7;
+}
+
+.jrx-thought::before { width: 10px; height: 10px; left: 8px; bottom: -9px; }
+.jrx-thought::after { width: 6px; height: 6px; left: 2px; bottom: -17px; }
+.jrx-thought i { width: 7px; height: 7px; border-radius: 50%; background: #2a74cc; animation: jrx-dot 1s ease-in-out infinite; }
+.jrx-thought i:nth-child(2) { animation-delay: .15s; }
+.jrx-thought i:nth-child(3) { animation-delay: .3s; }
+.jrx-mascot-wrap.is-thinking .jrx-thought { opacity: 1; transform: none; }
 
 /* assistant reply chips */
 .jrx-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -3587,7 +3754,9 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
 .jrx-send:focus-visible { outline: 3px solid #ffd936; outline-offset: 2px; }
 
 @media (prefers-reduced-motion: reduce) {
-    .jrx-launch-body, .jrx-launch-btn:hover .jrx-launch-body, .jrx-mascot, .jrx-badge, .jrx-typing span { animation: none; }
+    .jrx-launch-body, .jrx-walk, .jrx-launch-btn:hover .jrx-walk, .jrx-rig-arm, .jrx-launch-btn:hover .jrx-rig-arm, .jrx-rig-blink, .jrx-rig-walk, .jrx-rig-base, .jrx-launch-btn:hover .jrx-rig-walk, .jrx-rig::before, .jrx-mascot, .jrx-mascot-wrap.is-thinking .jrx-mascot, .jrx-thought i, .jrx-badge, .jrx-typing span, .jrx-online { animation: none; }
+    .jrx-rig-walk { display: none; }
+    .jrx-rig-base { opacity: 1; }
     .jrx-say { animation: none; }
 }
 
@@ -3929,12 +4098,15 @@ body:has(.jrx) .jr-pager { padding-right: 96px; }
     .jrc-options { display: flex; flex-direction: column; }
     .jrc-option { gap: 14px; padding: 16px; }
     /* chat widget: launcher above the bottom nav, panel as a sheet */
-    .jrx-launch { right: 14px; bottom: 90px; }
-    .jrx-launch-body { width: 64px; height: 98px; }
-    .jrx-say { right: 52px; bottom: 64px; max-width: 190px; font-size: 13px; }
-    .jrx-panel { right: 10px; left: 10px; bottom: 186px; width: auto; height: min(540px, calc(100dvh - 260px)); border-radius: 22px; }
+    .jrx-launch { right: 12px; bottom: 88px; }
+    .jrx-launch-btn { min-height: 54px; padding: 8px 86px 8px 14px; border-radius: 18px; }
+    .jrx-launch-text strong { font-size: 14px; }
+    .jrx-launch-text span { font-size: 11px; }
+    .jrx-walk { width: 80px; height: 124px; right: 2px; }
+    .jrx-say { right: 76px; bottom: 64px; max-width: 200px; font-size: 13px; }
+    .jrx-panel { right: 10px; left: 10px; bottom: 154px; width: auto; height: min(560px, calc(100dvh - 230px)); border-radius: 22px; }
     .jrx-body { padding-right: 104px; }
-    .jrx-mascot { height: 180px; right: -4px; }
+    .jrx-mascot-wrap { height: 180px; right: -4px; }
     .jrc-option-detail { white-space: normal; overflow-wrap: break-word; }
     .jrc-option-go { width: 38px; height: 38px; }
 
