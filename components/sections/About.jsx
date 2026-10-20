@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ImageGate } from "../ImageGate";
 import { BtnIsland, Icon } from "../Icons";
 import SafeImg from "../SafeImg";
 import { EXPERIENCE, SITE, TRUSTED, favicon } from "@/lib/data";
 
 /* Portrait: transparent cutout first, then the profile photo framed as an arch, then initials */
 function Portrait() {
+    const show = useContext(ImageGate);
     const [stage, setStage] = useState("cutout");
     const ref = useRef(null);
 
@@ -14,18 +16,21 @@ function Portrait() {
 
     useEffect(() => {
         const img = ref.current;
-        if (img && img.complete && img.naturalWidth === 0) fail();
-    }, []);
+        if (img && img.complete && img.naturalWidth === 0 && img.getAttribute("src")) fail();
+    }, [show]);
 
     const cls = `jra-portrait${stage === "photo" ? " is-photo" : ""}${stage === "missing" ? " is-missing" : ""}`;
     return (
         <div className={cls}>
-            {stage !== "missing" && (
+            {show && stage !== "missing" && (
                 <img
                     ref={ref}
                     key={stage}
                     src={stage === "cutout" ? SITE.cutout : SITE.photo}
+                    {...(stage === "cutout" ? { srcSet: `${SITE.cutout480} 480w, ${SITE.cutout} 960w`, sizes: "(max-width: 760px) 76vw, 460px", width: 960, height: 1351 } : {})}
                     alt={SITE.fullName}
+                    loading="lazy"
+                    decoding="async"
                     onError={fail}
                 />
             )}

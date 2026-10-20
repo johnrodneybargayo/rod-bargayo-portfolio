@@ -16,7 +16,7 @@ function ProjectCard({ p, featured, index, openProject }) {
     return (
         <article className={`jrw-card${featured ? " jrw-feature" : ""} jr-reveal jr-d${index + 2}`}>
             <div className="jrw-media">
-                <SafeImg srcs={[shot(p.url), mshot(p.url)]} alt={`Screenshot of the ${p.title} website`} loading="lazy" />
+                <SafeImg srcs={[shot(p.url), mshot(p.url)]} fit={featured ? 1080 : 640} alt={`Screenshot of the ${p.title} website`} loading="lazy" />
                 <span className="jrw-badge">{p.kicker}</span>
             </div>
 

@@ -40,12 +40,25 @@ export default function Overview({ go }) {
                 </div>
 
                 <div className="jrh-portrait">
-                    <img src={SITE.portrait} alt={`Portrait of ${SITE.fullName}`} width={760} height={1434} />
+                    {/* the page's largest image: AVIF first (smallest), WebP fallback, sized per screen */}
+                    <picture>
+                        <source type="image/avif" srcSet={SITE.portraitAvif} sizes={SITE.portraitSizes} />
+                        <img
+                        src={SITE.portrait}
+                        srcSet={`${SITE.portrait400} 400w, ${SITE.portrait560} 560w, ${SITE.portrait} 760w`}
+                        sizes={SITE.portraitSizes}
+                        alt={`Portrait of ${SITE.fullName}`}
+                        width={760}
+                        height={1434}
+                        fetchPriority="high"
+                        loading="eager"
+                        />
+                    </picture>
                 </div>
             </article>
 
-            <button className="jr-card jrh-visual jr-reveal jr-d2" type="button" onClick={() => go(2)} aria-label="Design to build: see selected work">
-                <SafeImg srcs={[shot(DESIGN_SHOT), mshot(DESIGN_SHOT)]} alt="" loading="lazy" />
+            <button className="jr-card jrh-visual jr-reveal jr-d2" type="button" onClick={() => go(2)} >
+                <SafeImg srcs={[shot(DESIGN_SHOT), mshot(DESIGN_SHOT)]} fit={640} alt="" loading="lazy" />
                 <span className="jrh-visual-shade" />
                 <span className="jrh-visual-body">
                     <span>

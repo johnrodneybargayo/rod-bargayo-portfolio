@@ -691,6 +691,8 @@ img.is-broken { visibility: hidden; }
 
 .jr-section.is-active .jrh-portrait { opacity: 1; transform: none; }
 
+.jrh-portrait picture { display: contents; }
+
 .jrh-portrait img {
     display: block;
     width: auto;

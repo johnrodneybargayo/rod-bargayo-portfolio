@@ -3,24 +3,29 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, SITE } from "@/lib/data";
 import { Icon, BtnIsland } from "./Icons";
+import { ImageGate } from "./ImageGate";
 import Overview from "./sections/Overview";
 import Expertise from "./sections/Expertise";
 import Work from "./sections/Work";
-import Demos from "./sections/Demos";
+import dynamic from "next/dynamic";
 import About from "./sections/About";
 import Contact from "./sections/Contact";
-import ContactModal from "./ContactModal";
-import ProjectModal from "./ProjectModal";
+
+/* Loaded on demand, so the first screen doesn't pay for them:
+   the plugin demos (heavy and interactive) and the two pop-ups. */
+const Demos = dynamic(() => import("./sections/Demos"), { ssr: false });
+const ContactModal = dynamic(() => import("./ContactModal"), { ssr: false });
+const ProjectModal = dynamic(() => import("./ProjectModal"), { ssr: false });
 
 const DURATION = 1000;
 
 /* One full-viewport section with its pager */
-function Section({ index, active, go, children }) {
+function Section({ index, active, go, images, children }) {
     const s = SECTIONS[index];
     const next = (index + 1) % SECTIONS.length;
     return (
         <section className={`jr-section${active ? " is-active" : ""}`} id={s.id} aria-label={s.name} inert={!active} aria-hidden={!active}>
-            <div className="jr-section-scroll">{children}</div>
+            <div className="jr-section-scroll"><ImageGate.Provider value={images}>{children}</ImageGate.Provider></div>
             <div className="jr-pager">
                 <div className="jr-pager-bars" aria-label="Sections">
                     {SECTIONS.map((sec, k) => (
@@ -43,6 +48,10 @@ export default function Portfolio() {
     const [project, setProject] = useState(null);
     /* curtain that sweeps across while the track slides; shows where you're going */
     const [wipe, setWipe] = useState(null);
+    /* demos and pop-ups mount after the visitor's first interaction (or when needed) */
+    const [ready, setReady] = useState(false);
+    const [visited, setVisited] = useState(() => new Set([0]));
+    useEffect(() => { setVisited(v => (v.has(index) ? v : new Set(v).add(index))); }, [index]);
 
     const indexRef = useRef(0);
     const busy = useRef(false);
@@ -82,6 +91,14 @@ export default function Portfolio() {
     }, [go]);
 
     const modalOpen = contact.open || !!project;
+
+    /* first pointer, key, wheel or touch: start loading the demos and pop-ups */
+    useEffect(() => {
+        const events = ["pointerdown", "keydown", "wheel", "touchstart"];
+        const on = () => { setReady(true); events.forEach(e => window.removeEventListener(e, on)); };
+        events.forEach(e => window.addEventListener(e, on, { passive: true }));
+        return () => events.forEach(e => window.removeEventListener(e, on));
+    }, []);
 
     /* keyboard: arrows, Home, End */
     useEffect(() => {
@@ -169,8 +186,8 @@ export default function Portfolio() {
             <div className="jr-app">
                 {/* SIDEBAR */}
                 <aside className="jr-sidebar">
-                    <a href="#home" className="jr-brand" onClick={e => { e.preventDefault(); go(0); }} aria-label={`${SITE.name} home`}>
-                        <span className="jr-brand-mark">RB</span>
+                    <a href="#home" className="jr-brand" onClick={e => { e.preventDefault(); go(0); }} >
+                        <span className="jr-brand-mark" aria-hidden="true">RB</span>
                         <span className="jr-brand-name">Rod <span>Bargayo</span></span>
                     </a>
 
@@ -224,12 +241,12 @@ export default function Portfolio() {
                             className="jr-track"
                             style={{ transform: `translate3d(-${index * 100}%,0,0)`, transition: instant ? "none" : undefined }}
                         >
-                            <Section index={0} active={index === 0} go={go}><Overview {...sectionProps} /></Section>
-                            <Section index={1} active={index === 1} go={go}><Expertise {...sectionProps} /></Section>
-                            <Section index={2} active={index === 2} go={go}><Work {...sectionProps} /></Section>
-                            <Section index={3} active={index === 3} go={go}><Demos /></Section>
-                            <Section index={4} active={index === 4} go={go}><About {...sectionProps} /></Section>
-                            <Section index={5} active={index === 5} go={go}><Contact {...sectionProps} /></Section>
+                            <Section index={0} active={index === 0} go={go} images={ready || visited.has(0)}><Overview {...sectionProps} /></Section>
+                            <Section index={1} active={index === 1} go={go} images={ready || visited.has(1)}><Expertise {...sectionProps} /></Section>
+                            <Section index={2} active={index === 2} go={go} images={ready || visited.has(2)}><Work {...sectionProps} /></Section>
+                            <Section index={3} active={index === 3} go={go} images={ready || visited.has(3)}>{(ready || index >= 2) && <Demos />}</Section>
+                            <Section index={4} active={index === 4} go={go} images={ready || visited.has(4)}><About {...sectionProps} /></Section>
+                            <Section index={5} active={index === 5} go={go} images={ready || visited.has(5)}><Contact {...sectionProps} /></Section>
                         </div>
                         {wipe && (
                             <div key={wipe.n} className={`jr-wipe is-${wipe.dir}`} aria-hidden="true" onAnimationEnd={e => { if (e.target === e.currentTarget) setWipe(null); }}>
@@ -251,8 +268,8 @@ export default function Portfolio() {
                 </nav>
             </div>
 
-            <ProjectModal project={project} onClose={closeProject} onContact={name => { closeProject(); setTimeout(() => openContact(name), 220); }} />
-            <ContactModal open={contact.open} project={contact.project} onClose={closeContact} />
+            {(ready || project) && <ProjectModal project={project} onClose={closeProject} onContact={name => { closeProject(); setTimeout(() => openContact(name), 220); }} />}
+            {(ready || contact.open) && <ContactModal open={contact.open} project={contact.project} onClose={closeContact} />}
         </>
     );
 }

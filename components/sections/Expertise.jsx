@@ -226,7 +226,7 @@ export default function Expertise({ go }) {
             <div className="jre-grid">
                 <article className="jre-card jre-featured jr-reveal jr-d2">
                     <div className="jre-collage" aria-hidden="true">
-                        {COLLAGE.map(c => <SafeImg key={c.key} srcs={c.srcs} alt="" loading="lazy" />)}
+                        {COLLAGE.map(c => <SafeImg key={c.key} srcs={c.srcs} fit={640} alt="" loading="lazy" />)}
                     </div>
                     <span className="jre-icon jre-icon-sun"><Icon name="code" /></span>
                     <div className="jre-featured-body">

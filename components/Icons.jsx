@@ -1,17 +1,12 @@
-/* Icons: Font Awesome (solid + brands), tree-shaken SVGs rendered inline.
+/* Icons: Font Awesome (solid + brands). Only the icon shapes are imported and
+   drawn as inline SVG, so there is no icon runtime or extra stylesheet to load.
    Every section uses <Icon name="..." />, so the whole site switches here. */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import {
     faHouse, faTableCellsLarge, faBriefcase, faPlug, faUser, faComments, faArrowRight, faArrowUp,
     faXmark, faCode, faBolt, faCartShopping, faChartLine, faShieldHalved, faEnvelope,
     faMobileScreenButton, faPaintbrush, faLayerGroup, faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faGithub, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
-
-/* the stylesheet is imported above, so don't inject it again at runtime */
-config.autoAddCss = false;
 
 const ICONS = {
     home: faHouse,
@@ -40,15 +35,20 @@ const ICONS = {
 };
 
 export function Icon({ name, small = false, className = "" }) {
-    const icon = ICONS[name] || faArrowRight;
+    const [w, h, , , path] = (ICONS[name] || faArrowRight).icon;
+    const paths = Array.isArray(path) ? path : [path];
     return (
-        <FontAwesomeIcon
-            icon={icon}
+        <svg
             className={`jr-icon${small ? " jr-icon-sm" : ""}${className ? " " + className : ""}`}
-            /* "arrow" is the diagonal "go to" arrow used on cards and buttons */
-            transform={name === "arrow" ? { rotate: 45 } : undefined}
+            viewBox={`0 0 ${w} ${h}`}
             aria-hidden="true"
-        />
+            focusable="false"
+        >
+            {/* "arrow" is the diagonal "go to" arrow used on cards and buttons */}
+            <g transform={name === "arrow" ? `rotate(45 ${w / 2} ${h / 2})` : undefined}>
+                {paths.map((d, k) => <path key={k} fill="currentColor" d={d} />)}
+            </g>
+        </svg>
     );
 }
 

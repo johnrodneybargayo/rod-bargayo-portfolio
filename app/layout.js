@@ -5,10 +5,9 @@ import "./globals.css";
    no request to Google at build time or at runtime (SIL Open Font License). */
 /* Instrument Sans: text and headings (variable weight, with a true italic) */
 const sans = localFont({
-    src: [
-        { path: "./fonts/instrument-sans-latin-wght-normal.woff2", weight: "400 700", style: "normal" },
-        { path: "./fonts/instrument-sans-latin-wght-italic.woff2", weight: "400 700", style: "italic" }
-    ],
+    src: "./fonts/instrument-sans-latin-wght-normal.woff2",
+    weight: "400 700",
+    style: "normal",
     variable: "--font-sans",
     display: "swap"
 });
@@ -29,14 +28,16 @@ const mono = localFont({
         { path: "./fonts/dm-mono-latin-500-normal.woff2", weight: "500", style: "normal" }
     ],
     variable: "--font-mono",
-    display: "swap"
+    display: "swap",
+    preload: false
 });
 
 const display = localFont({
     src: "./fonts/anton-latin-400-normal.woff2",
     weight: "400",
     variable: "--font-display",
-    display: "swap"
+    display: "swap",
+    preload: false
 });
 
 export const metadata = {
