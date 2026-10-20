@@ -3304,14 +3304,22 @@ body:has(.jrx) .jr-pager { padding-right: 300px; }
     background-size: 400% 100%;
     /* 2 full cycles during the 1.6s walk-in, then he stops on the last frame */
     /* walks for 1.6s (2 full strides), stands for 6.4s, then walks again - forever */
-    animation: jrx-cycle .8s steps(4) .2s infinite, jrx-walk-show 8s .2s infinite both;
+    /* every 8s: fades in, takes 2 strides, fades back into the standing pose */
+    animation: jrx-cycle .8s linear .2s infinite, jrx-walk-show 8s linear .2s infinite both;
 }
 
-.jrx-rig-base { animation: jrx-stand-show 8s .2s infinite both; }
+.jrx-rig-base { animation: jrx-stand-show 8s linear .2s infinite both; }
 
-@keyframes jrx-cycle { from { background-position: 0 0; } to { background-position: 133.3333% 0; } }
-@keyframes jrx-walk-show { 0%, 19.9% { opacity: 1; } 20%, 100% { opacity: 0; } }
-@keyframes jrx-stand-show { 0%, 19.9% { opacity: 0; } 20%, 100% { opacity: 1; } }
+/* starts and ends on frame 4 (the one closest to standing), so the change between walking and standing is invisible */
+@keyframes jrx-cycle {
+    0%, 22% { background-position: 100% 0; }
+    22.01%, 50% { background-position: 0 0; }
+    50.01%, 72% { background-position: 33.3333% 0; }
+    72.01%, 100% { background-position: 66.6667% 0; }
+}
+@keyframes jrx-walk-show { 0% { opacity: 0; } 2%, 20% { opacity: 1; } 22%, 100% { opacity: 0; } }
+/* the standing pose stays solid underneath while the walk fades over it, so he never turns see-through */
+@keyframes jrx-stand-show { 0%, 2% { opacity: 1; } 2.01%, 19.99% { opacity: 0; } 20%, 100% { opacity: 1; } }
 
 @keyframes jrx-shadow-walk {
     from, to { transform: none; opacity: 1; }
@@ -3319,7 +3327,7 @@ body:has(.jrx) .jr-pager { padding-right: 300px; }
 
 
 /* hover: walking on the spot while waving */
-.jrx-launch-btn:hover .jrx-rig-walk { opacity: 1; animation: jrx-cycle .8s steps(4) infinite; }
+.jrx-launch-btn:hover .jrx-rig-walk { opacity: 1; animation: jrx-cycle .8s linear infinite; }
 .jrx-launch-btn:hover .jrx-rig-base { opacity: 0; animation: none; }
 
 /* forearm swings from the elbow (194,214 in the 260x400 frame) */
@@ -3368,7 +3376,7 @@ body:has(.jrx) .jr-pager { padding-right: 300px; }
     bottom: 4px;
     width: 108px;
     height: 166px;
-    animation: jrx-walkin 1.6s linear .2s both;
+    animation: jrx-walkin 1.7s cubic-bezier(.3,.15,.45,1) .2s both;
 }
 
 @keyframes jrx-walkin {
