@@ -3,7 +3,7 @@ import SafeImg from "../SafeImg";
 import { SITE, mshot, shot } from "@/lib/data";
 
 /* "Design to build" card: a real site I designed and built, not a stock photo */
-const DESIGN_SHOT = "https://services.podify.com/launch-sales-page/";
+const DESIGN_SHOT = "https://services.podify.com/podcast-launch/";
 
 export default function Overview({ go }) {
     return (

@@ -21,7 +21,22 @@ const TOOLS = {
     ga4: { name: "GA4", domain: "analytics.google.com" },
     ads: { name: "Google Ads", domain: "ads.google.com" },
     hostinger: { name: "Hostinger", domain: "hostinger.com" },
-    brevo: { name: "Brevo", domain: "brevo.com" }
+    brevo: { name: "Brevo", domain: "brevo.com" },
+    zapier: { name: "Zapier", domain: "zapier.com" },
+    mautic: { name: "Mautic", domain: "mautic.org" },
+    figma: { name: "Figma", domain: "figma.com" },
+    canva: { name: "Canva", domain: "canva.com" },
+    substack: { name: "Substack", domain: "substack.com" },
+    linktree: { name: "Linktree", domain: "linktr.ee" },
+    chatbots: { name: "Chatbots", icon: "message" },
+    kajabi: { name: "Kajabi", domain: "kajabi.com" },
+    stripe: { name: "Stripe", domain: "stripe.com" },
+    paypal: { name: "PayPal", domain: "paypal.com" },
+    kajabipay: { name: "Kajabi Payments", domain: "kajabi.com" },
+    shopifypay: { name: "Shopify Payments", domain: "shopify.com" },
+    hitpay: { name: "HitPay", domain: "hitpayapp.com" },
+    paymongo: { name: "PayMongo", domain: "paymongo.com" },
+    payoneer: { name: "Payoneer", domain: "payoneer.com" }
 };
 
 function Logos({ ids, light = false }) {
@@ -29,7 +44,9 @@ function Logos({ ids, light = false }) {
         <ul className={`jre-logos${light ? " is-light" : ""}`} aria-label="Tools">
             {ids.map(id => (
                 <li key={id}>
-                    <SafeImg src={favicon(TOOLS[id].domain)} alt="" width={16} height={16} loading="lazy" />
+                    {TOOLS[id].domain
+                        ? <SafeImg src={favicon(TOOLS[id].domain)} alt="" width={16} height={16} loading="lazy" />
+                        : <Icon name={TOOLS[id].icon} small />}
                     {TOOLS[id].name}
                 </li>
             ))}
@@ -59,11 +76,13 @@ const SERVICES = [
         title: "Commerce and payments",
         copy: "Stores and billing that just work for customers.",
         points: [
-            "Shopify and WooCommerce store setup and customization",
+            "Shopify, WooCommerce and Kajabi store setup and customization",
             "Subscriptions, credits and member billing",
-            "Payment gateway setup with checkout testing before launch"
+            "Payment gateway setup with checkout testing before launch",
+            "Local and international payments, including HitPay and PayMongo for the Philippines"
         ],
-        tools: ["shopify", "woo", "wordpress"]
+        tools: ["shopify", "woo", "kajabi"],
+        payments: ["stripe", "paypal", "kajabipay", "shopifypay", "hitpay", "paymongo", "payoneer"]
     },
     {
         key: "tracking",
@@ -91,53 +110,85 @@ const SERVICES = [
     }
 ];
 
-/* Sample automation: the same lead flow this site's contact form runs */
-const FLOW = [
-    { key: "form", title: "Website form", detail: "A visitor sends a message", icon: "message" },
-    { key: "api", title: "API route", detail: "Blocks spam, checks the fields", logo: "nextjs.org", icon: "code" },
-    { key: "mail", title: "Brevo email", detail: "Message lands in your inbox", logo: "brevo.com", icon: "mail" },
-    { key: "list", title: "Brevo list", detail: "Opted-in visitors are saved", logo: "brevo.com", icon: "user" },
-    { key: "campaign", title: "Email campaign", detail: "Your newsletter reaches them", icon: "mail" }
+/* Sample automations. Lead flow = what this site's own contact form runs;
+   resource access = a typical Zapier to Kajabi lead-magnet setup. */
+const FLOWS = [
+    {
+        key: "lead",
+        tab: "Website lead to Brevo",
+        payload: '{ "name": "Alex Tan", "email": "alex@example.com", "subscribe": true }',
+        done: "Done: lead delivered and saved in 5 steps",
+        steps: [
+            { key: "form", title: "Website form", detail: "A visitor sends a message", icon: "message" },
+            { key: "api", title: "API route", detail: "Blocks spam, checks the fields", logo: "nextjs.org", icon: "code" },
+            { key: "mail", title: "Brevo email", detail: "Message lands in your inbox", logo: "brevo.com", icon: "mail" },
+            { key: "list", title: "Brevo list", detail: "Opted-in visitors are saved", logo: "brevo.com", icon: "user" },
+            { key: "campaign", title: "Email campaign", detail: "Your newsletter reaches them", icon: "mail" }
+        ]
+    },
+    {
+        key: "kajabi",
+        tab: "Resource access to Kajabi",
+        payload: '{ "name": "Alex Tan", "email": "alex@example.com", "resource": "Free guide" }',
+        done: "Done: contact created and resource unlocked in 5 steps",
+        steps: [
+            { key: "form", title: "Resource access form", detail: "A visitor asks for the free resource", icon: "message" },
+            { key: "zap", title: "Zapier trigger", detail: "Catches the new form entry", logo: "zapier.com", icon: "zap" },
+            { key: "contact", title: "Kajabi contact", detail: "Creates or updates the contact", logo: "kajabi.com", icon: "user" },
+            { key: "offer", title: "Kajabi offer", detail: "Tags them and grants access", logo: "kajabi.com", icon: "shield" },
+            { key: "email", title: "Access email", detail: "Login link sent right away", icon: "mail" }
+        ]
+    }
 ];
 
-const SAMPLE = '{ "name": "Alex Tan", "email": "alex@example.com", "subscribe": true }';
-
 function AutomationDemo() {
+    const [which, setWhich] = useState(0);
     const [step, setStep] = useState(-1); /* -1 idle, 0..n running, n = finished */
     const timer = useRef(null);
-    const running = step >= 0 && step < FLOW.length;
+    const flow = FLOWS[which];
+    const total = flow.steps.length;
+    const running = step >= 0 && step < total;
 
     useEffect(() => () => clearTimeout(timer.current), []);
 
+    const pick = i => { clearTimeout(timer.current); setStep(-1); setWhich(i); };
+
     const run = () => {
         clearTimeout(timer.current);
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduced) { setStep(FLOW.length); return; }
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setStep(total); return; }
         let i = 0;
         setStep(0);
         const tick = () => {
             i += 1;
             setStep(i);
-            if (i < FLOW.length) timer.current = setTimeout(tick, 650);
+            if (i < total) timer.current = setTimeout(tick, 650);
         };
         timer.current = setTimeout(tick, 650);
     };
 
-    const status = step < 0 ? "Ready to run" : running ? `Running step ${step + 1} of ${FLOW.length}` : "Done: lead delivered and saved in 5 steps";
+    const status = step < 0 ? "Ready to run" : running ? `Running step ${step + 1} of ${total}` : flow.done;
 
     return (
         <div className="jre-flow-wrap">
+            <div className="jre-flow-tabs" role="group" aria-label="Sample automations">
+                {FLOWS.map((f, i) => (
+                    <button key={f.key} type="button" aria-pressed={i === which} className={i === which ? "is-on" : ""} onClick={() => pick(i)}>
+                        {f.tab}
+                    </button>
+                ))}
+            </div>
+
             <div className="jre-flow-top">
                 <span className="jre-flow-tag">Sample automation</span>
-                <code className="jre-flow-payload" aria-label="Sample test data">{SAMPLE}</code>
+                <code className="jre-flow-payload" aria-label="Sample test data">{flow.payload}</code>
                 <button type="button" className="jre-run" onClick={run} disabled={running}>
                     <Icon name="zap" small /> {step < 0 ? "Run sample" : running ? "Running" : "Run again"}
                 </button>
             </div>
 
-            <ol className="jre-flow">
-                {FLOW.map((f, i) => {
-                    const state = step < 0 ? "" : i < step || step === FLOW.length ? " is-done" : i === step ? " is-active" : "";
+            <ol className="jre-flow" key={flow.key}>
+                {flow.steps.map((f, i) => {
+                    const state = step < 0 ? "" : i < step || step === total ? " is-done" : i === step ? " is-active" : "";
                     return (
                         <li key={f.key} className={`jre-node${state}`}>
                             <span className="jre-node-icon">
@@ -185,9 +236,11 @@ export default function Expertise({ go }) {
                             <li>Custom themes and layouts, not a reskinned template</li>
                             <li>Fast pages: optimized images, caching and clean code</li>
                             <li>SEO basics and analytics in place on launch day</li>
+                            <li>Figma and Canva designs turned into real, responsive pages</li>
+                            <li>Creator setups: Substack newsletters and Linktree pages</li>
                             <li>Handover notes so your team can edit content</li>
                         </ul>
-                        <Logos ids={["wordpress", "shopify", "squarespace", "framer", "react", "next"]} light />
+                        <Logos ids={["wordpress", "shopify", "squarespace", "framer", "react", "next", "figma", "canva", "substack", "linktree"]} light />
                         <button type="button" className="jre-link jre-link-light" onClick={() => go(2)}>
                             View work <Icon name="arrow-right" small />
                         </button>
@@ -204,6 +257,12 @@ export default function Expertise({ go }) {
                             </div>
                         </div>
                         <Points items={s.points} />
+                        {s.payments && (
+                            <div className="jre-pay">
+                                <span className="jre-pay-label">Payment options</span>
+                                <Logos ids={s.payments} />
+                            </div>
+                        )}
                         <Logos ids={s.tools} />
                         {s.demos && (
                             <button type="button" className="jre-link" onClick={() => go(3)}>
@@ -223,11 +282,13 @@ export default function Expertise({ go }) {
                             </div>
                         </div>
                         <Points items={[
-                            "Connect forms, email, CRM and spreadsheets through their APIs",
-                            "Cut out copy-paste work between tools",
+                            "Connect forms, email, CRM and spreadsheets with Zapier or direct APIs",
+                            "Resource access and contact forms wired into Kajabi through Zapier",
+                            "Email marketing automation in Mautic and Brevo",
+                            "Chatbot systems that answer questions and capture leads",
                             "Every flow documented, so you know what runs where"
                         ]} />
-                        <Logos ids={["brevo", "next", "vercel"]} />
+                        <Logos ids={["zapier", "kajabi", "mautic", "brevo", "chatbots", "next"]} />
                     </div>
                     <AutomationDemo />
                 </article>
