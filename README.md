@@ -30,7 +30,7 @@ scripts/
 campaigns/
   example.html           starter campaign email (copy it per campaign)
 public/
-  john_rodney_cutout.png ADD THIS: transparent cutout portrait
+  john_rodney_cutout.webp transparent cutout portrait (About section)
 ```
 
 ## Run locally
@@ -120,8 +120,10 @@ and the log shows `contact brevo subscribe error`.
 
 ## Portrait
 
-Put your transparent cutout at `public/john_rodney_cutout.png`. Without it,
-the About section shows your profile photo in an arch frame instead.
+The About section uses `public/john_rodney_cutout.webp` (960 x 1351, transparent
+WebP, about 125 KB). To replace it, export a transparent cutout cropped tight to
+the subject, about 960px wide, as WebP with alpha, and keep the same file name.
+If the file is missing, the section shows your profile photo in an arch frame.
 
 ## Contact form protection
 
