@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, SITE } from "@/lib/data";
 import { Icon, BtnIsland } from "./Icons";
 import { ImageGate } from "./ImageGate";
-import ChatButton from "./ChatButton";
 import Overview from "./sections/Overview";
 import Expertise from "./sections/Expertise";
 import Work from "./sections/Work";
@@ -17,6 +16,7 @@ import Contact from "./sections/Contact";
 const Demos = dynamic(() => import("./sections/Demos"), { ssr: false });
 const ContactModal = dynamic(() => import("./ContactModal"), { ssr: false });
 const ProjectModal = dynamic(() => import("./ProjectModal"), { ssr: false });
+const ChatWidget = dynamic(() => import("./ChatWidget"), { ssr: false });
 
 const DURATION = 1000;
 
@@ -45,7 +45,7 @@ function Section({ index, active, go, images, children }) {
 export default function Portfolio() {
     const [index, setIndex] = useState(0);
     const [instant, setInstant] = useState(false);
-    const [contact, setContact] = useState({ open: false, project: "" });
+    const [contact, setContact] = useState({ open: false, project: "", message: "" });
     const [project, setProject] = useState(null);
     /* curtain that sweeps across while the track slides; shows where you're going */
     const [wipe, setWipe] = useState(null);
@@ -95,7 +95,7 @@ export default function Portfolio() {
 
     /* first pointer, key, wheel or touch: start loading the demos and pop-ups */
     useEffect(() => {
-        const events = ["pointerdown", "keydown", "wheel", "touchstart"];
+        const events = ["pointerdown", "pointermove", "keydown", "wheel", "touchstart"];
         const on = () => { setReady(true); events.forEach(e => window.removeEventListener(e, on)); };
         events.forEach(e => window.addEventListener(e, on, { passive: true }));
         return () => events.forEach(e => window.removeEventListener(e, on));
@@ -175,7 +175,7 @@ export default function Portfolio() {
         };
     }, [go]);
 
-    const openContact = useCallback((projectName = "") => setContact({ open: true, project: projectName }), []);
+    const openContact = useCallback((projectName = "", message = "") => setContact({ open: true, project: projectName, message }), []);
     const closeContact = useCallback(() => setContact(c => ({ ...c, open: false })), []);
     const openProject = useCallback(p => setProject(p), []);
     const closeProject = useCallback(() => setProject(null), []);
@@ -270,8 +270,8 @@ export default function Portfolio() {
             </div>
 
             {(ready || project) && <ProjectModal project={project} onClose={closeProject} onContact={name => { closeProject(); setTimeout(() => openContact(name), 220); }} />}
-            <ChatButton ready={ready} />
-            {(ready || contact.open) && <ContactModal open={contact.open} project={contact.project} onClose={closeContact} />}
+            {ready && <ChatWidget ready={ready} go={go} openContact={openContact} />}
+            {(ready || contact.open) && <ContactModal open={contact.open} project={contact.project} message={contact.message} onClose={closeContact} />}
         </>
     );
 }

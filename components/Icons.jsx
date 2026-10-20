@@ -4,7 +4,8 @@
 import {
     faHouse, faTableCellsLarge, faBriefcase, faPlug, faUser, faComments, faArrowRight, faArrowUp,
     faXmark, faCode, faBolt, faCartShopping, faChartLine, faShieldHalved, faEnvelope,
-    faMobileScreenButton, faPaintbrush, faLayerGroup, faChevronRight
+    faMobileScreenButton, faPaintbrush, faLayerGroup, faChevronRight,
+    faRocket, faCircleQuestion, faHeadset, faPaperPlane, faMinus, faCommentDots
 } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faGithub, faFacebookF, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
@@ -28,6 +29,12 @@ const ICONS = {
     brush: faPaintbrush,
     layers: faLayerGroup,
     chevron: faChevronRight,
+    rocket: faRocket,
+    question: faCircleQuestion,
+    headset: faHeadset,
+    send: faPaperPlane,
+    minus: faMinus,
+    dots: faCommentDots,
     linkedin: faLinkedinIn,
     github: faGithub,
     facebook: faFacebookF,

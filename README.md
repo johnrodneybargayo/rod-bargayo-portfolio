@@ -132,7 +132,9 @@ If the file is missing, the section shows your profile photo in an arch frame.
 2. In Vercel, add `NEXT_PUBLIC_BREVO_CONVERSATIONS_ID` with that ID, then redeploy.
    (Variables starting with `NEXT_PUBLIC_` are built into the page, so a redeploy is required.)
 
-The yellow **Chat** button appears bottom right. Brevo's script only loads after the
+The chat widget (mascot + chat window, `components/ChatWidget.jsx`) appears bottom right;
+with the ID set, its quick actions and messages open Brevo's live chat. Without it,
+messages go into the contact form instead. Mascot images live in `public/mascot/`. Brevo's script only loads after the
 visitor's first interaction (or when they press the button), so it doesn't affect
 page speed. Reply from Brevo's web inbox or the Brevo mobile app.
 

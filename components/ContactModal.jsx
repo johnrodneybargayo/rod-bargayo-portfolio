@@ -13,7 +13,7 @@ const RULES = {
     message: v => (v.trim() ? "" : "Tell me a little about the project.")
 };
 
-export default function ContactModal({ open, project, onClose }) {
+export default function ContactModal({ open, project, message, onClose }) {
     const [values, setValues] = useState(EMPTY);
     const [errors, setErrors] = useState({});
     const [state, setState] = useState("idle"); /* idle | sending | sent | error */
@@ -25,11 +25,11 @@ export default function ContactModal({ open, project, onClose }) {
     useEffect(() => {
         if (!open) return;
         started.current = Date.now();
-        setValues(v => ({ ...v, project: project || "" }));
+        setValues(v => ({ ...v, project: project || "", message: message || v.message }));
         setErrors({});
         setServerError("");
         setState(s => (s === "sent" ? "idle" : s));
-    }, [open, project]);
+    }, [open, project, message]);
 
     const set = key => e => setValues(v => ({ ...v, [key]: e.target.value }));
 
