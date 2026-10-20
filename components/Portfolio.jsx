@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, SITE } from "@/lib/data";
-import { Icon, IconSprite, BtnIsland } from "./Icons";
+import { Icon, BtnIsland } from "./Icons";
 import Overview from "./sections/Overview";
 import Expertise from "./sections/Expertise";
 import Work from "./sections/Work";
@@ -166,7 +166,6 @@ export default function Portfolio() {
 
     return (
         <>
-            <IconSprite />
             <div className="jr-app">
                 {/* SIDEBAR */}
                 <aside className="jr-sidebar">
@@ -178,7 +177,7 @@ export default function Portfolio() {
                     <nav className="jr-nav" aria-label="Main navigation">
                         {SECTIONS.map((s, i) => (
                             <button key={s.id} type="button" className={`jr-nav-item${i === index ? " is-active" : ""}`} aria-current={i === index ? "page" : undefined} onClick={() => go(i)}>
-                                <Icon name={s.icon} />
+                                <span className="jr-nav-icon"><Icon name={s.icon} /></span>
                                 <span className="jr-nav-label">{s.name}</span>
                             </button>
                         ))}

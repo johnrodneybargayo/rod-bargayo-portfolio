@@ -3,13 +3,26 @@ import "./globals.css";
 
 /* Font files live in app/fonts and ship with the site:
    no request to Google at build time or at runtime (SIL Open Font License). */
+/* Instrument Sans: text and headings (variable weight, with a true italic) */
 const sans = localFont({
-    src: "./fonts/manrope-latin-wght-normal.woff2",
-    weight: "200 800",
+    src: [
+        { path: "./fonts/instrument-sans-latin-wght-normal.woff2", weight: "400 700", style: "normal" },
+        { path: "./fonts/instrument-sans-latin-wght-italic.woff2", weight: "400 700", style: "italic" }
+    ],
     variable: "--font-sans",
     display: "swap"
 });
 
+/* Instrument Serif italic: accent words ("I build", "that", "real.") */
+const serif = localFont({
+    src: "./fonts/instrument-serif-latin-400-italic.woff2",
+    weight: "400",
+    style: "italic",
+    variable: "--font-serif",
+    display: "swap"
+});
+
+/* DM Mono: code snippets only (logs, sample data) */
 const mono = localFont({
     src: [
         { path: "./fonts/dm-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
@@ -45,7 +58,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`}>
+        <html lang="en" className={`${sans.variable} ${serif.variable} ${mono.variable} ${display.variable}`}>
             <body>{children}</body>
         </html>
     );

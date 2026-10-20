@@ -1,3 +1,4 @@
-Manrope, DM Mono and Anton are licensed under the SIL Open Font License 1.1
-(https://openfontlicense.org). Files taken from the Fontsource packages
-@fontsource-variable/manrope, @fontsource/dm-mono and @fontsource/anton.
+Instrument Sans, Instrument Serif, DM Mono and Anton are licensed under the
+SIL Open Font License 1.1 (https://openfontlicense.org). Files taken from the
+Fontsource packages @fontsource-variable/instrument-sans, @fontsource/instrument-serif,
+@fontsource/dm-mono and @fontsource/anton.
