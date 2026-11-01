@@ -3,7 +3,51 @@
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Modal";
 import { Icon } from "./Icons";
-import { SHOT_WIDTH, favicon, hostOf, shotSources } from "@/lib/data";
+import { favicon, hostOf, shotSources } from "@/lib/data";
+
+/* Is this full-page screenshot squeezed?
+   A site with a marquee or slider wider than the screen can come back from the
+   screenshot service extra wide: the page sits on the left and an empty strip
+   (only the wide element runs through it) trails off to the right. Two signs:
+   1. the rightmost column is one flat colour down almost the whole page
+      (a real page's edge changes colour from section to section), and
+   2. a wide band on the right matches that edge, row by row.
+   Returns true when both hold and the real page is under 70% of the width. */
+function isSqueezed(img) {
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    if (!W || !H) return false;
+    const cw = 240;
+    const ch = Math.max(1, Math.min(1600, Math.round(H * cw / W)));
+    const canvas = document.createElement("canvas");
+    canvas.width = cw;
+    canvas.height = ch;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    let d;
+    try {
+        ctx.drawImage(img, 0, 0, cw, ch);
+        d = ctx.getImageData(0, 0, cw, ch).data;
+    } catch {
+        return false; /* pixels not readable: keep the screenshot */
+    }
+    const near = (i, j) => Math.abs(d[i] - d[j]) + Math.abs(d[i + 1] - d[j + 1]) + Math.abs(d[i + 2] - d[j + 2]) <= 30;
+    const at = (x, y) => (y * cw + x) * 4;
+
+    /* 1: flat right edge */
+    const ref = at(cw - 1, 0);
+    let flat = 0;
+    for (let y = 0; y < ch; y++) if (near(at(cw - 1, y), ref)) flat++;
+    if (flat / ch < 0.85) return false;
+
+    /* 2: walk left while each column still matches the right edge in 92% of rows */
+    let x = cw - 2;
+    for (; x >= 0; x--) {
+        let match = 0;
+        for (let y = 0; y < ch; y++) if (near(at(x, y), at(cw - 1, y))) match++;
+        if (match / ch < 0.92) break;
+    }
+    return (x + 1) / cw < 0.7;
+}
 
 export default function ProjectModal({ project, onClose, onContact }) {
     /* keep the last project while the close animation runs */
@@ -11,8 +55,6 @@ export default function ProjectModal({ project, onClose, onContact }) {
     const [view, setView] = useState("shot");
     const [srcIndex, setSrcIndex] = useState(0);
     const [ready, setReady] = useState(false);
-    /* >1 when the capture came back wider than the desktop viewport */
-    const [zoom, setZoom] = useState(1);
     const shotRef = useRef(null);
     const imgRef = useRef(null);
     const raf = useRef(0);
@@ -24,7 +66,6 @@ export default function ProjectModal({ project, onClose, onContact }) {
             setView("shot");
             setSrcIndex(0);
             setReady(false);
-            setZoom(1);
         }
     }, [project]);
 
@@ -76,13 +117,12 @@ export default function ProjectModal({ project, onClose, onContact }) {
 
     const onLoad = e => {
         /* mShots returns a small placeholder while it renders; treat it as a miss */
-        const w = e.currentTarget.naturalWidth;
-        if (w < 300) { setSrcIndex(i => i + 1); return; }
-        /* Backup for sites whose wide elements still stretched the capture:
-           show only the first 1280px (the real page width) at full preview width.
-           The mShots fallback is already resized to 1280, so it's left alone. */
-        const isMicrolink = e.currentTarget.src.includes("microlink");
-        setZoom(isMicrolink && w > SHOT_WIDTH * 1.15 ? w / SHOT_WIDTH : 1);
+        const img = e.currentTarget;
+        if (img.naturalWidth < 300) { setSrcIndex(i => i + 1); return; }
+        /* A squeezed full-page capture doesn't show the site at full width:
+           use the first-screen capture instead, which is always taken on a
+           full-width desktop screen (the later sources are never squeezed). */
+        if (srcIndex === 0 && isSqueezed(img)) { setSrcIndex(1); return; }
         setReady(true);
         /* wait for the new width to lay out before measuring the scroll length */
         requestAnimationFrame(() => requestAnimationFrame(startScroll));
@@ -137,9 +177,8 @@ export default function ProjectModal({ project, onClose, onContact }) {
                                     key={`${shown.url}-${srcIndex}`}
                                     src={sources[srcIndex]}
                                     alt={`Full page screenshot of ${shown.title}`}
-                                    style={zoom > 1 ? { width: `${zoom * 100}%`, maxWidth: "none" } : undefined}
                                     onLoad={onLoad}
-                                    onError={() => { setZoom(1); setSrcIndex(i => i + 1); }}
+                                    onError={() => setSrcIndex(i => i + 1)}
                                 />
                             </div>
                         )}

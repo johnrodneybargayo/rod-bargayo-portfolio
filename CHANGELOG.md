@@ -5,6 +5,37 @@ Versions follow [Semantic Versioning](https://semver.org/): a fix or tweak to an
 existing feature is a patch (2.1.x), a new feature or a content repositioning is
 a minor (2.x.0).
 
+## [2.1.5] - 2026-11-01
+
+### Fixed
+- Previews now show sites at full desktop width, the way visitors see them on
+  a big monitor (1920 x 1080 screen, was 1280). Cropping a squeezed capture
+  (2.1.4) still showed Podify's narrow layout, so instead the pop-up now
+  detects a squeezed full-page capture (page on the left, a flat empty strip
+  trailing right) and switches to the first-screen capture, which is always
+  taken at full width. Normal full-page captures still scroll through the
+  whole page.
+
+### Removed
+- The 2.1.4 crop/zoom of squeezed screenshots (replaced by the switch above).
+
+## [2.1.4] - 2026-11-01
+
+### Fixed
+- Preview pop-up: sites with a marquee or slider wider than the screen (Podify)
+  still showed the page squeezed to the left with the scrolling text trailing
+  off to the right. The 2.1.1 crop assumed the page was exactly 1280px wide in
+  the screenshot, which wasn't true. The pop-up now measures where the real
+  page ends in the screenshot itself and crops everything past it, so the page
+  fills the preview edge to edge. Normal screenshots are left untouched.
+
+### Added
+- `/api/shot` route (`app/api/shot/route.js`): serves the preview screenshots
+  from the portfolio's own domain so the browser is allowed to read the
+  pixels for that measurement. It only accepts project URLs listed in
+  `lib/data.js` (not an open proxy) and caches each screenshot at Vercel's edge
+  for a day.
+
 ## [2.1.3] - 2026-11-01
 
 ### Added
