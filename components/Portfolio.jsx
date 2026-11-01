@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SECTIONS, SITE } from "@/lib/data";
-import { Icon, BtnIsland } from "./Icons";
+import { Icon } from "./Icons";
 import { ImageGate } from "./ImageGate";
 import Overview from "./sections/Overview";
 import Expertise from "./sections/Expertise";
@@ -232,7 +232,6 @@ export default function Portfolio() {
                             <span className="jr-topbar-role">{SITE.role[0].toUpperCase() + SITE.role.slice(1)}</span>
                             <button className="jr-btn jr-btn-sun jr-btn-sm" type="button" onClick={() => openContact()}>
                                 Let&apos;s talk
-                                <BtnIsland />
                             </button>
                         </div>
                     </header>

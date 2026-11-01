@@ -55,8 +55,7 @@ function CaseCard({ p, featured, index, openProject }) {
                     aria-label={`Read the ${p.title} case study`}
                     onClick={() => openProject(p)}
                 >
-                    {featured && "Read the case study"}
-                    <Icon name="arrow-right" small />
+                    {featured ? "Read the case study" : <Icon name="arrow-right" small />}
                 </button>
             </div>
         </article>

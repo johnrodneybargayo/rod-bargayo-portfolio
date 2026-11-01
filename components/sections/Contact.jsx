@@ -1,4 +1,4 @@
-import { BtnIsland, Icon } from "../Icons";
+import { Icon } from "../Icons";
 import { SITE } from "@/lib/data";
 
 const OPTIONS = [
@@ -32,7 +32,6 @@ export default function Contact({ openContact }) {
                     <p>Tell me about your business and where it&apos;s stuck. Within one business day I&apos;ll send back 2 or 3 practical ways to win more customers or save time. Free, whether we work together or not.</p>
                     <button className="jr-btn jr-btn-sun" type="button" onClick={() => openContact("Free growth review")}>
                         Get my free review
-                        <BtnIsland icon="arrow-right" />
                     </button>
                 </div>
 

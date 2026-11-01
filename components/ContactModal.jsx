@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Modal";
-import { BtnIsland, Icon } from "./Icons";
+import { Icon } from "./Icons";
 import { SITE } from "@/lib/data";
 
 const EMPTY = { name: "", email: "", project: "", message: "", website: "", subscribe: false };
@@ -81,7 +81,6 @@ export default function ContactModal({ open, project, message, onClose }) {
                     <p>Thanks, {sentTo.name}. I&apos;ll reply to {sentTo.email} soon.</p>
                     <button className="jr-btn jr-btn-ghost jr-btn-sm" type="button" onClick={onClose}>
                         Close
-                        <BtnIsland icon="close" />
                     </button>
                 </div>
             ) : (
@@ -124,7 +123,6 @@ export default function ContactModal({ open, project, message, onClose }) {
                             <p className="jrm-note">Goes straight to my inbox.</p>
                             <button className="jr-btn jr-btn-sun" type="submit" disabled={state === "sending"}>
                                 {state === "sending" ? "Sending" : "Send message"}
-                                <BtnIsland />
                             </button>
                         </div>
                     </form>

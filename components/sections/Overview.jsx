@@ -1,4 +1,4 @@
-import { BtnIsland, Icon } from "../Icons";
+import { Icon } from "../Icons";
 import SafeImg from "../SafeImg";
 import { SITE, mshot, shot } from "@/lib/data";
 
@@ -29,11 +29,9 @@ export default function Overview({ go, openContact }) {
                         <div className="jrh-actions">
                             <button className="jr-btn jr-btn-sun" type="button" onClick={() => go(2)}>
                                 See client results
-                                <BtnIsland />
                             </button>
                             <button className="jr-btn jr-btn-ghost" type="button" onClick={() => openContact("Free growth review")}>
                                 Get a free growth review
-                                <BtnIsland icon="arrow-right" />
                             </button>
                         </div>
                     </div>

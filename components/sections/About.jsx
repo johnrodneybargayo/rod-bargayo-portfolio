@@ -2,7 +2,7 @@
 
 import { useContext, useEffect, useRef, useState } from "react";
 import { ImageGate } from "../ImageGate";
-import { BtnIsland, Icon } from "../Icons";
+import { Icon } from "../Icons";
 import SafeImg from "../SafeImg";
 import { EXPERIENCE, SITE, TRUSTED, favicon } from "@/lib/data";
 
@@ -71,7 +71,6 @@ export default function About({ openContact }) {
                         </p>
                         <button className="jr-btn jra-cta" type="button" onClick={() => openContact()}>
                             Let&apos;s talk
-                            <BtnIsland />
                         </button>
                     </div>
 

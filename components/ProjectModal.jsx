@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Modal from "./Modal";
-import { BtnIsland, Icon } from "./Icons";
-import { favicon, hostOf, shotSources } from "@/lib/data";
+import { Icon } from "./Icons";
+import { SHOT_WIDTH, favicon, hostOf, shotSources } from "@/lib/data";
 
 export default function ProjectModal({ project, onClose, onContact }) {
     /* keep the last project while the close animation runs */
@@ -11,7 +11,10 @@ export default function ProjectModal({ project, onClose, onContact }) {
     const [view, setView] = useState("shot");
     const [srcIndex, setSrcIndex] = useState(0);
     const [ready, setReady] = useState(false);
+    /* >1 when the capture came back wider than the desktop viewport */
+    const [zoom, setZoom] = useState(1);
     const shotRef = useRef(null);
+    const imgRef = useRef(null);
     const raf = useRef(0);
     const open = !!project;
 
@@ -21,6 +24,7 @@ export default function ProjectModal({ project, onClose, onContact }) {
             setView("shot");
             setSrcIndex(0);
             setReady(false);
+            setZoom(1);
         }
     }, [project]);
 
@@ -56,6 +60,14 @@ export default function ProjectModal({ project, onClose, onContact }) {
         return stopScroll;
     }, [open]);
 
+    /* the image can finish loading (e.g. from cache) before React's onLoad is attached;
+       replay the load event so the preview still sizes and scrolls */
+    useEffect(() => {
+        const img = imgRef.current;
+        if (open && img && img.complete && img.naturalWidth && !ready) img.dispatchEvent(new Event("load"));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open, shown, srcIndex]);
+
     if (!shown) return <Modal open={false} onClose={onClose} labelledBy="jrmProjectTitle" dialogClass="jrm-dialog-project" closeInBar />;
 
     const sources = shotSources(shown.url);
@@ -64,9 +76,16 @@ export default function ProjectModal({ project, onClose, onContact }) {
 
     const onLoad = e => {
         /* mShots returns a small placeholder while it renders; treat it as a miss */
-        if (e.currentTarget.naturalWidth < 300) { setSrcIndex(i => i + 1); return; }
+        const w = e.currentTarget.naturalWidth;
+        if (w < 300) { setSrcIndex(i => i + 1); return; }
+        /* Backup for sites whose wide elements still stretched the capture:
+           show only the first 1280px (the real page width) at full preview width.
+           The mShots fallback is already resized to 1280, so it's left alone. */
+        const isMicrolink = e.currentTarget.src.includes("microlink");
+        setZoom(isMicrolink && w > SHOT_WIDTH * 1.15 ? w / SHOT_WIDTH : 1);
         setReady(true);
-        startScroll();
+        /* wait for the new width to lay out before measuring the scroll length */
+        requestAnimationFrame(() => requestAnimationFrame(startScroll));
     };
 
     /* full case study (challenge, what I built, impact) when the project has one */
@@ -114,11 +133,13 @@ export default function ProjectModal({ project, onClose, onContact }) {
                                 onKeyDown={stopScroll}
                             >
                                 <img
+                                    ref={imgRef}
                                     key={`${shown.url}-${srcIndex}`}
                                     src={sources[srcIndex]}
                                     alt={`Full page screenshot of ${shown.title}`}
+                                    style={zoom > 1 ? { width: `${zoom * 100}%`, maxWidth: "none" } : undefined}
                                     onLoad={onLoad}
-                                    onError={() => setSrcIndex(i => i + 1)}
+                                    onError={() => { setZoom(1); setSrcIndex(i => i + 1); }}
                                 />
                             </div>
                         )}
@@ -129,7 +150,6 @@ export default function ProjectModal({ project, onClose, onContact }) {
                                 <span>The preview service didn&apos;t respond. The live site is one click away.</span>
                                 <a className="jr-btn jr-btn-sun jr-btn-sm" href={shown.url} target="_blank" rel="noopener noreferrer">
                                     Open live site
-                                    <BtnIsland />
                                 </a>
                             </div>
                         )}
@@ -163,11 +183,9 @@ export default function ProjectModal({ project, onClose, onContact }) {
                 <div className="jrm-actions">
                     <a className="jr-btn jr-btn-ghost" href={shown.url} target="_blank" rel="noopener noreferrer">
                         Visit live site
-                        <BtnIsland />
                     </a>
                     <button className="jr-btn jr-btn-sun" type="button" onClick={() => onContact(`Results like ${shown.title}`)}>
                         I want results like this
-                        <BtnIsland />
                     </button>
                 </div>
 

@@ -1,5 +1,9 @@
 # Rod Bargayo portfolio (Next.js)
 
+Version 2.1.2. Written for business owners: every section leads with results
+(leads, sales, upfront payments, hours saved), not tools. See
+[CHANGELOG.md](CHANGELOG.md) for what changed in each version.
+
 Next.js 16 (App Router) + React 19. No other dependencies: no Tailwind, no UI
 kit, no email package. Styles are hand-written CSS with hardcoded hex colours
 and a class prefix per section.
@@ -8,8 +12,9 @@ and a class prefix per section.
 app/
   layout.js              fonts (bundled, see app/fonts) + page metadata
   page.js                renders <Portfolio />
-  globals.css            all styles (jr- shell, jrh- overview, jre- expertise,
-                         jrw- work, jrl- demos, jra- about, jrc- contact, jrm- overlays)
+  globals.css            all styles (jr- shell, jrh- overview, jre- solutions,
+                         jrw- results, jrcs- case studies, jrl- demos,
+                         jra- about, jrc- contact, jrm- overlays)
   api/contact/route.js   contact form handler (Node runtime)
   fonts/                 Manrope, DM Mono, Anton (SIL Open Font License)
 components/
@@ -20,7 +25,8 @@ components/
   ContactModal.jsx       contact form
   Modal.jsx              shared overlay (Escape, focus trap, focus return)
 lib/
-  data.js                ALL CONTENT: links, projects, experience. Edit here.
+  data.js                ALL CONTENT: links, case studies, experience. Edit here.
+                         Add real numbers to each case study's `metrics`.
   brevo-api.mjs          Brevo API v3 client (plain fetch, no SDK): email,
                          contacts, campaigns
   brevo.js               contact form email + newsletter opt-in through Brevo
@@ -154,3 +160,9 @@ only loads when a visitor asks for live chat, so it doesn't affect page speed.
 
 `legacy-static/` holds the previous single-file version for reference.
 It is ignored by Git and by Vercel, and can be deleted.
+
+## Changelog
+
+Every update gets an entry in [CHANGELOG.md](CHANGELOG.md) and a version bump
+in `package.json`: a fix or tweak is a patch (2.1.x), a new feature or content
+repositioning is a minor (2.x.0).
