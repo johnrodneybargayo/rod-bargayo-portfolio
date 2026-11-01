@@ -49,42 +49,42 @@ function WaveRig({ className = "" }) {
 
 /* ---------- what the launcher mascot says on its own, by section ---------- */
 const TIPS = [
-    [["wave", "Hi! 👋 How can I help you?"], ["explaining", "Need a website that actually works?"], ["happy", "Questions? Click me, I answer fast."]],
-    [["thinking", "Not sure which platform fits you?"], ["explaining", "Ask me about Zapier or Kajabi automations!"], ["happy", "I can set up your payments too."]],
-    [["happy", "Like what you see?"], ["explaining", "Want a site like these? Let's talk!"], ["thinking", "Curious how one was built? Ask me!"]],
-    [["explaining", "Try the demos, they're real plugins!"], ["thinking", "Need a custom plugin like these?"], ["wave", "Questions? I'm right here."]],
-    [["wave", "Nice to meet you! 😊"], ["happy", "Let's build something together."], ["thinking", "Want to know how I work? Ask me!"]],
-    [["welcome", "Prefer chatting? Click me!"], ["happy", "I usually reply within a day."], ["wave", "Say hi, I don't bite! 👋"]]
+    [["wave", "Hi! 👋 How can I help your business?"], ["explaining", "Is your website bringing in customers?"], ["happy", "Questions? Click me, I answer fast."]],
+    [["thinking", "Which problem costs you the most?"], ["explaining", "Tired of copy-paste admin? Ask me!"], ["happy", "Want customers to pay you upfront?"]],
+    [["happy", "Want results like these?"], ["explaining", "Your business could be next. Let's talk!"], ["thinking", "Curious how a result was won? Ask me!"]],
+    [["explaining", "Click around, these tools are live!"], ["thinking", "Could your business use one of these?"], ["wave", "Questions? I'm right here."]],
+    [["wave", "Nice to meet you! 😊"], ["happy", "Let's grow your business together."], ["thinking", "Want to know how I work? Ask me!"]],
+    [["welcome", "Want a free growth review? Click me!"], ["happy", "I usually reply within a day."], ["wave", "Say hi, I don't bite! 👋"]]
 ];
 
 /* ---------- the assistant's answers ---------- */
 const LIVE = { label: "Talk to Rod", live: true };
 const TOPICS = [
-    { label: "Services", topic: "services" },
+    { label: "How can you help me?", topic: "services" },
+    { label: "Client results", topic: "work" },
     { label: "Pricing", topic: "pricing" },
-    { label: "Timeline", topic: "timeline" },
-    { label: "Platforms", topic: "platforms" }
+    { label: "Timeline", topic: "timeline" }
 ];
 
 const ANSWERS = {
     hello: {
         pose: "wave",
-        text: "Hi there! 👋 I'm Rod's assistant. Ask me about services, pricing, timelines or platforms, or talk to Rod directly.",
+        text: "Hi there! 👋 I'm Rod's assistant. Ask how Rod can help your business, see client results, or talk to Rod directly.",
         chips: [...TOPICS, LIVE]
     },
     services: {
         pose: "explaining",
-        text: "Rod builds websites and web apps, custom WordPress plugins, online stores and payments, automations between your tools (Zapier, Kajabi, Brevo, Mautic), tracking and dashboards, plus hosting and long-term care.",
-        chips: [{ label: "Pricing", topic: "pricing" }, { label: "See examples", topic: "work" }, LIVE]
+        text: "Rod helps business owners in four ways: websites that turn visitors into enquiries, checkouts and client portals that get you paid upfront, tracking that shows which ads make money, and automations that take admin off your plate.",
+        chips: [{ label: "See client results", topic: "work" }, { label: "Free growth review", live: true }, LIVE]
     },
     pricing: {
         pose: "thinking",
-        text: "Every project is quoted on its scope, so you only pay for what you need. Tell Rod what you have in mind and he'll send a clear quote, usually within one business day.",
+        text: "Every project is quoted on what it needs to achieve, so you only pay for what moves the needle. Tell Rod about your business and he'll send a clear quote, usually within one business day.",
         chips: [{ label: "Get a quote", live: true }, { label: "Timeline", topic: "timeline" }]
     },
     timeline: {
         pose: "thinking",
-        text: "It depends on the size of the project. Rod gives you a timeline together with the quote, and keeps you posted at each step: discover, build, launch.",
+        text: "It depends on the size of the project. Rod gives you a timeline with the quote and keeps you posted at each step: find the leak, fix it, measure it.",
         chips: [{ label: "Start a project", topic: "start" }, LIVE]
     },
     platforms: {
@@ -94,8 +94,8 @@ const ANSWERS = {
     },
     wordpress: {
         pose: "happy",
-        text: "WordPress is Rod's specialty: custom themes, custom plugins (like Podify's client portal and referral program), WooCommerce stores, speed and security fixes.",
-        chips: [{ label: "Try the plugin demos", go: 3 }, LIVE]
+        text: "Yes, WordPress is Rod's specialty. He built Podify's client portal, where clients prepay with credits and reorder on their own, plus a referral program that brings in new customers.",
+        chips: [{ label: "Try it live", go: 3 }, LIVE]
     },
     shopify: {
         pose: "happy",
@@ -119,8 +119,8 @@ const ANSWERS = {
     },
     work: {
         pose: "happy",
-        text: "Rod has built for Podify, Dr. Laura Berman, Labour Hire and Recruitment, MedPersonnel and more. Want to see them?",
-        chips: [{ label: "Open Selected work", go: 2 }, LIVE]
+        text: "A few wins: Podify turned one-off orders into prepaid, recurring revenue. King Operating now judges ad spend by investor leads, not clicks. Dr. Laura Berman's free content now builds an email list. Want the full stories?",
+        chips: [{ label: "Open client results", go: 2 }, LIVE]
     },
     contact: {
         pose: "welcome",
@@ -131,10 +131,10 @@ const ANSWERS = {
         pose: "happy",
         text: "Great, let's get you started! 🚀 What are you looking for?",
         chips: [
-            { label: "A new website", say: "I need a new website" },
-            { label: "A custom plugin", say: "I need a custom plugin" },
-            { label: "An online store", say: "I need an online store" },
-            { label: "Automation", say: "I need an automation" }
+            { label: "More leads", say: "I need more leads" },
+            { label: "Get paid online", say: "I want customers to pay online" },
+            { label: "Less admin", say: "I want to automate my admin" },
+            { label: "A new website", say: "I need a new website" }
         ]
     },
     brief: {
@@ -152,7 +152,7 @@ const ANSWERS = {
 
 /* keyword matching, first match wins */
 const RULES = [
-    ["brief", /\b(i need|i want|looking for|build me|make me|new (web)?site|redesign)\b/i],
+    ["brief", /\b(i need|i want|looking for|build me|make me|new (web)?site|redesign|more leads)\b/i],
     ["pricing", /\b(price|pricing|cost|how much|budget|rate|quote|fee|charge|expensive|cheap)\b/i],
     ["timeline", /\b(how long|timeline|time ?frame|deadline|when can|weeks?|days?|fast|urgent|asap)\b/i],
     ["payments", /\b(payments?|stripe|paypal|hitpay|paymongo|payoneer|gateway|checkout)\b/i],
@@ -161,7 +161,7 @@ const RULES = [
     ["automation", /\b(automat\w*|zapier|kajabi|mautic|brevo|integrat\w*|api|crm|chat ?bot)\b/i],
     ["platforms", /\b(platform|squarespace|framer|react|next\.?js|figma|canva|substack|linktree|tech|stack)\b/i],
     ["support", /\b(host\w*|maintenance|maintain|support|security|backup|update|fix|bug|broken|slow|speed)\b/i],
-    ["work", /\b(portfolio|examples?|previous|clients?|projects?|case stud\w*|your work)\b/i],
+    ["work", /\b(portfolio|examples?|previous|clients?|projects?|case stud\w*|your work|results?|proof)\b/i],
     ["contact", /\b(email|phone|call|contact|reach|where are you|location|time ?zone|available|hours)\b/i],
     ["services", /\b(services?|what (do|can) you|offer|help with|do you do)\b/i],
     ["thanks", /\b(thanks|thank you|ty|great|awesome|cool|ok(ay)?)\b/i],

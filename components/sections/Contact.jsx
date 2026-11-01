@@ -27,11 +27,11 @@ export default function Contact({ openContact }) {
                 </span>
 
                 <div className="jrc-body">
-                    <span className="jrc-kicker">Have a good problem to solve?</span>
-                    <h2>Let&apos;s make it <em>real.</em></h2>
-                    <p>Whether you need a new website, a custom WordPress solution or a better-performing web system, let&apos;s work out the right approach.</p>
-                    <button className="jr-btn jr-btn-sun" type="button" onClick={() => openContact()}>
-                        Let&apos;s talk
+                    <span className="jrc-kicker">Free growth review</span>
+                    <h2>Let&apos;s find your <em>next sale.</em></h2>
+                    <p>Tell me about your business and where it&apos;s stuck. Within one business day I&apos;ll send back 2 or 3 practical ways to win more customers or save time. Free, whether we work together or not.</p>
+                    <button className="jr-btn jr-btn-sun" type="button" onClick={() => openContact("Free growth review")}>
+                        Get my free review
                         <BtnIsland icon="arrow-right" />
                     </button>
                 </div>
@@ -39,7 +39,7 @@ export default function Contact({ openContact }) {
                 <div className="jrc-sign">
                     <span className="jrc-person">
                         <img src={SITE.avatar} alt="" width={56} height={56} loading="lazy" />
-                        <span><strong>{SITE.fullName}</strong>Freelance web developer, Philippines</span>
+                        <span><strong>{SITE.fullName}</strong>Co-founder, Aura Creo / Cebu, Philippines</span>
                     </span>
                     <span className="jrc-social">
                         {SOCIAL.map(s => (

@@ -9,11 +9,11 @@ import StickyDemo from "../demos/StickyDemo";
 import GateDemo from "../demos/GateDemo";
 
 const TABS = [
-    { id: "portal", title: "Client Portal", sub: "Credits, deliverables, Stripe + ClickUp", icon: "chart", Demo: PortalDemo },
-    { id: "refer", title: "Referrals and Affiliates", sub: "Links, commissions, monthly payouts", icon: "user", Demo: ReferralsDemo },
-    { id: "esl", title: "ESL Lesson Scheduler", sub: "Bookings with a credit ledger", icon: "grid", Demo: EslDemo },
-    { id: "sticky", title: "Sticky Booking Calendar", sub: "GoHighLevel card on chosen pages", icon: "zap", Demo: StickyDemo },
-    { id: "gate", title: "Resource Access Gate", sub: "Email-only access, lead export", icon: "shield", Demo: GateDemo }
+    { id: "portal", title: "Self-serve client portal", sub: "Clients prepay, reorder and track work alone", icon: "chart", Demo: PortalDemo },
+    { id: "refer", title: "Referral program", sub: "Customers bring you customers", icon: "user", Demo: ReferralsDemo },
+    { id: "esl", title: "Prepaid lesson booking", sub: "Students pay first, book themselves", icon: "grid", Demo: EslDemo },
+    { id: "sticky", title: "Booking calendar that follows", sub: "More sales calls from your articles", icon: "zap", Demo: StickyDemo },
+    { id: "gate", title: "Free guide lead capture", sub: "Turn free content into email leads", icon: "shield", Demo: GateDemo }
 ];
 
 export default function Demos() {
@@ -46,7 +46,8 @@ export default function Demos() {
     return (
         <>
             <div className="jr-section-head jr-reveal jr-d1">
-                <h2 className="jr-title">Plugins I&apos;ve built. <em>Try them here.</em></h2>
+                <h2 className="jr-title">Don&apos;t take my word for it. <em>Try it yourself.</em></h2>
+                <p className="jr-lede">Working versions of tools I built for real businesses. Click around as if you were their customer.</p>
             </div>
 
             <div className="jrl-grid">
@@ -70,7 +71,7 @@ export default function Demos() {
                             </button>
                         ))}
                     </div>
-                    <p className="jrl-note">Demo versions with sample data. Nothing here charges a card or sends an email.</p>
+                    <p className="jrl-note">Sample data only. Nothing here charges a card or sends an email.</p>
                 </div>
 
                 <div className="jr-card jrl-window jr-reveal jr-d3">

@@ -10,7 +10,7 @@ const EMPTY = { name: "", email: "", project: "", message: "", website: "", subs
 const RULES = {
     name: v => (v.trim() ? "" : "Please add your name."),
     email: v => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? "" : "Please enter a valid email address."),
-    message: v => (v.trim() ? "" : "Tell me a little about the project.")
+    message: v => (v.trim() ? "" : "Tell me a little about your business.")
 };
 
 export default function ContactModal({ open, project, message, onClose }) {
@@ -86,8 +86,8 @@ export default function ContactModal({ open, project, message, onClose }) {
                 </div>
             ) : (
                 <>
-                    <h2 id="jrmContactTitle">Tell me what you&apos;re building.</h2>
-                    <p className="jrm-intro">Share a little context and I&apos;ll help shape the next useful step.</p>
+                    <h2 id="jrmContactTitle">Tell me about your business.</h2>
+                    <p className="jrm-intro">Where you&apos;re stuck and what you want more of. I&apos;ll reply within one business day with practical ideas, free.</p>
                     <form className="jrm-form" onSubmit={submit} noValidate>
                         {/* honeypot: people never see it, bots fill it */}
                         <div className="jrm-hp" aria-hidden="true">
@@ -101,10 +101,10 @@ export default function ContactModal({ open, project, message, onClose }) {
                             {field("email", "Email",
                                 <input ref={refs.email} id="jrm-email" type="email" autoComplete="email" placeholder="you@company.com" value={values.email} onChange={set("email")} aria-invalid={!!errors.email} />)}
                         </div>
-                        {field("project", "Project type",
-                            <input id="jrm-project" type="text" placeholder="Website, plugin, automation or something new" value={values.project} onChange={set("project")} />)}
+                        {field("project", "What you want more of",
+                            <input id="jrm-project" type="text" placeholder="Leads, sales, bookings, time back..." value={values.project} onChange={set("project")} />)}
                         {field("message", "Message",
-                            <textarea ref={refs.message} id="jrm-message" placeholder="What would you like to make better?" value={values.message} onChange={set("message")} aria-invalid={!!errors.message} />)}
+                            <textarea ref={refs.message} id="jrm-message" placeholder="Tell me about your business and what is holding it back." value={values.message} onChange={set("message")} aria-invalid={!!errors.message} />)}
 
                         <label className="jrm-check" htmlFor="jrm-subscribe">
                             <input id="jrm-subscribe" type="checkbox" checked={values.subscribe} onChange={e => setValues(v => ({ ...v, subscribe: e.target.checked }))} />

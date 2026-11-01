@@ -45,12 +45,12 @@ export default function About({ openContact }) {
             <h2 className="jra-head">
                 <span className="jra-line jra-line-left">
                     <span className="jra-italic">Think</span>
-                    <span className="jra-block">Deeper</span>
+                    <span className="jra-block">Profit</span>
                     <span className="jra-swash jra-swash-1" aria-hidden="true" />
                 </span>
                 <span className="jra-line jra-line-right">
                     <span className="jra-italic">Build</span>
-                    <span className="jra-block jra-block-cobalt">Better</span>
+                    <span className="jra-block jra-block-cobalt">Growth</span>
                     <span className="jra-swash jra-swash-2" aria-hidden="true" />
                 </span>
             </h2>
@@ -63,11 +63,11 @@ export default function About({ openContact }) {
 
                 <div className="jra-left jr-reveal jr-d2">
                     <div>
-                        <p className="jra-kicker">About me</p>
-                        <h3>Where craft meets <em>code.</em></h3>
+                        <p className="jra-kicker">Why work with me</p>
+                        <h3>I think like an <em>owner.</em></h3>
                         <p>
-                            I&apos;m John Rodney, a freelance web developer in Cebu. I build sites clients can run themselves:
-                            clean, documented and easy to extend. Off the clock: movies, hiking and freediving.
+                            I&apos;m Rod, co-founder of Aura Creo in Cebu. I run a business too, so I judge every website
+                            by what it brings in: leads, sales and hours saved. Developer and marketer, in one person.
                         </p>
                         <button className="jr-btn jra-cta" type="button" onClick={() => openContact()}>
                             Let&apos;s talk
@@ -83,7 +83,7 @@ export default function About({ openContact }) {
                                 ))}
                             </div>
                             <div className="jra-trust-copy">
-                                <strong>Trusted by real teams</strong>
+                                <strong>Trusted by growing businesses</strong>
                                 Podify, Dr. Laura Berman, LHR and Go Online Now
                             </div>
                         </div>
@@ -94,15 +94,15 @@ export default function About({ openContact }) {
 
                 <div className="jra-right">
                     <ul className="jra-features jr-reveal jr-d3">
-                        <li><span className="jra-feat-icon"><Icon name="grid" /></span>Six<br />platforms</li>
-                        <li><span className="jra-feat-icon"><Icon name="code" /></span>React<br />and Next.js</li>
-                        <li><span className="jra-feat-icon"><Icon name="zap" /></span>Connected<br />systems</li>
+                        <li><span className="jra-feat-icon"><Icon name="chart" /></span>Results you<br />can measure</li>
+                        <li><span className="jra-feat-icon"><Icon name="message" /></span>Plain English,<br />no jargon</li>
+                        <li><span className="jra-feat-icon"><Icon name="shield" /></span>Support<br />after launch</li>
                     </ul>
 
                     <div className="jra-exp jr-reveal jr-d4">
                         <div className="jra-exp-core">
                             <div className="jra-exp-top">
-                                <h4>Experience</h4>
+                                <h4>Background</h4>
                                 <span className="jr-label">{EXPERIENCE.length} roles</span>
                             </div>
                             <ul className="jra-exp-list">

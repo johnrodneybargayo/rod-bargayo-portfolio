@@ -205,11 +205,11 @@ export default function Portfolio() {
                         <div className="jr-availability">
                             <div className="jr-availability-top">
                                 <span className="jr-status-dot" aria-hidden="true" />
-                                Open for new projects
+                                Taking new clients
                             </div>
-                            <p>Have a challenge in mind? Let&apos;s turn it into something useful.</p>
-                            <button className="jr-availability-link" type="button" onClick={() => openContact()}>
-                                Let&apos;s talk
+                            <p>Losing leads or drowning in admin? Let&apos;s fix the leak.</p>
+                            <button className="jr-availability-link" type="button" onClick={() => openContact("Free growth review")}>
+                                Free growth review
                                 <Icon name="arrow" small />
                             </button>
                         </div>

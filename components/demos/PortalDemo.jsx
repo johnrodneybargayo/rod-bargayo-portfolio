@@ -15,6 +15,9 @@ const SERVICES = [
     { name: "Audiogram", cost: 2 }
 ];
 
+/* plain-English labels for the activity feed */
+const SOURCE = { stripe: "payment", clickup: "team board", portal: "portal" };
+
 export default function PortalDemo() {
     const [credits, setCredits] = useState(12);
     const [items, setItems] = useState([
@@ -74,7 +77,7 @@ export default function PortalDemo() {
                 <div className="jrl-box">
                     <div className="jrl-box-head">
                         <h4>Deliverables</h4>
-                        <button className="jrl-link" type="button" onClick={sync}>Simulate ClickUp update</button>
+                        <button className="jrl-link" type="button" onClick={sync}>Simulate team progress</button>
                     </div>
                     <ul className="pp-list">
                         {items.map(item => (
@@ -114,10 +117,10 @@ export default function PortalDemo() {
             </div>
 
             <div className="jrl-log">
-                <span className="jrl-log-title">Webhook log</span>
+                <span className="jrl-log-title">Happening automatically</span>
                 <ol>
                     {log.slice(-6).reverse().map(e => (
-                        <li key={e.id}><span>{e.src}</span> {e.ev}  {e.note}</li>
+                        <li key={e.id}><span>{SOURCE[e.src] || e.src}</span> {e.note}</li>
                     ))}
                 </ol>
             </div>

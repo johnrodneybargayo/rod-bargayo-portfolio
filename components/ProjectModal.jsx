@@ -69,8 +69,11 @@ export default function ProjectModal({ project, onClose, onContact }) {
         startScroll();
     };
 
+    /* full case study (challenge, what I built, impact) when the project has one */
+    const isCase = !!shown.challenge;
+
     return (
-        <Modal open={open} onClose={onClose} labelledBy="jrmProjectTitle" dialogClass="jrm-dialog-project" closeInBar>
+        <Modal open={open} onClose={onClose} labelledBy="jrmProjectTitle" dialogClass={`jrm-dialog-project${isCase ? " jrcs-dialog" : ""}`} closeInBar>
             <div className="jrm-bar">
                 <span className="jrm-url">
                     <img src={favicon(host)} alt="" width={16} height={16} />
@@ -149,21 +152,50 @@ export default function ProjectModal({ project, onClose, onContact }) {
                 <div className="jrm-project-text">
                     <span className="jr-label">{shown.kicker}</span>
                     <h2 id="jrmProjectTitle">{shown.title}</h2>
-                    {shown.desc && <p className="jrm-desc">{shown.desc}</p>}
-                    <div className="jrm-tags">
-                        {(shown.tags || []).map(t => <span key={t}>{t}</span>)}
-                    </div>
+                    {isCase && <p className="jrcs-modal-result">{shown.result}</p>}
+                    {!isCase && shown.desc && <p className="jrm-desc">{shown.desc}</p>}
+                    {!isCase && (
+                        <div className="jrm-tags">
+                            {(shown.tags || []).map(t => <span key={t}>{t}</span>)}
+                        </div>
+                    )}
                 </div>
                 <div className="jrm-actions">
                     <a className="jr-btn jr-btn-ghost" href={shown.url} target="_blank" rel="noopener noreferrer">
                         Visit live site
                         <BtnIsland />
                     </a>
-                    <button className="jr-btn jr-btn-sun" type="button" onClick={() => onContact(shown.title)}>
-                        Let&apos;s talk
+                    <button className="jr-btn jr-btn-sun" type="button" onClick={() => onContact(`Results like ${shown.title}`)}>
+                        I want results like this
                         <BtnIsland />
                     </button>
                 </div>
+
+                {isCase && (
+                    <div className="jrcs-story">
+                        {shown.metrics?.length > 0 && (
+                            <ul className="jrcs-metrics jrcs-metrics-modal" aria-label="Results">
+                                {shown.metrics.map(m => <li key={m.label}><strong>{m.value}</strong><span>{m.label}</span></li>)}
+                            </ul>
+                        )}
+                        <div className="jrcs-cols">
+                            <section className="jrcs-col">
+                                <span className="jrcs-step">01 / The problem</span>
+                                <p>{shown.challenge}</p>
+                            </section>
+                            <section className="jrcs-col">
+                                <span className="jrcs-step">02 / What I built</span>
+                                <p>{shown.solution}</p>
+                            </section>
+                            <section className="jrcs-col jrcs-col-win">
+                                <span className="jrcs-step">03 / What changed</span>
+                                <ul className="jrcs-wins">
+                                    {shown.impact.map(t => <li key={t}>{t}</li>)}
+                                </ul>
+                            </section>
+                        </div>
+                    </div>
+                )}
             </div>
         </Modal>
     );

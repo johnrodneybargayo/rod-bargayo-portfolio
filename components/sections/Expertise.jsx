@@ -56,87 +56,85 @@ function Logos({ ids, light = false }) {
 
 const COLLAGE = FEATURED.map(p => ({ key: p.key, srcs: [shot(p.url), mshot(p.url)] }));
 
+/* Each card is a business problem and what fixing it does for you.
+   Tools are left out on purpose: owners buy outcomes, not stacks. */
 const SERVICES = [
     {
-        key: "plugins",
+        key: "portals",
         icon: "plug",
-        title: "Plugins and web apps",
-        copy: "Custom features your off-the-shelf tools can't do.",
+        title: "Let clients serve themselves",
+        copy: "Clients order, pay and track work without emailing you.",
         points: [
-            "Custom WordPress plugins, like Podify's client portal with credits and its referral program",
-            "React and Next.js apps styled with Tailwind, deployed on Vercel",
-            "Admin screens your team can use without a developer"
+            "Clients buy packages or prepaid credits and reorder without a sales call",
+            "A live progress tracker replaces “any update?” emails",
+            "Online booking where lessons or sessions are paid before they happen"
         ],
-        tools: ["wordpress", "php", "react", "next", "tailwind", "vercel"],
         demos: true
     },
     {
         key: "commerce",
         icon: "cart",
-        title: "Commerce and payments",
-        copy: "Stores and billing that just work for customers.",
+        title: "Get paid faster",
+        copy: "A checkout your customers trust, on any device.",
         points: [
-            "Shopify, WooCommerce and Kajabi store setup and customization",
-            "Subscriptions, credits and member billing",
-            "Payment gateway setup with checkout testing before launch",
-            "Local and international payments, including HitPay and PayMongo for the Philippines"
+            "Online store or one-page checkout, tested before launch",
+            "Monthly plans and prepaid packages for predictable income",
+            "Cards and PayPal worldwide, plus GCash and local banks in the Philippines"
         ],
-        tools: ["shopify", "woo", "kajabi"],
         payments: ["stripe", "paypal", "kajabipay", "shopifypay", "hitpay", "paymongo", "payoneer"]
     },
     {
         key: "tracking",
         icon: "chart",
-        title: "Tracking and dashboards",
-        copy: "Know which pages and ads bring in leads.",
+        title: "Know what makes you money",
+        copy: "See which ads and pages bring in paying customers.",
         points: [
-            "Tag Manager containers with clean, named events",
-            "GA4 conversions and Google Ads conversion tracking",
-            "Focused admin dashboards for the numbers that matter"
-        ],
-        tools: ["gtm", "ga4", "ads"]
+            "Every enquiry, booking and sale traced back to where it came from",
+            "Stop paying for ads that don't convert",
+            "A simple dashboard with only the numbers that matter"
+        ]
     },
     {
-        key: "care",
-        icon: "shield",
-        title: "Care and infrastructure",
-        copy: "Your site stays fast, safe and online after launch.",
+        key: "referrals",
+        icon: "user",
+        title: "Turn customers into your sales team",
+        copy: "Referral and affiliate programs that pay for themselves.",
         points: [
-            "VPS hosting and Vercel deploys",
-            "Security hardening, updates and backups",
-            "Dependable long-term support and fixes"
+            "Every customer and partner gets a tracked referral link",
+            "Commission is paid only when a referral actually buys",
+            "Monthly payout reports, no spreadsheets"
         ],
-        tools: ["vercel", "hostinger", "wordpress"]
+        demos: true
     }
 ];
 
-/* Sample automations. Lead flow = what this site's own contact form runs;
-   resource access = a typical Zapier to Kajabi lead-magnet setup. */
+/* Sample automations, in plain language. Lead flow = what this site's own contact form runs;
+   free guide = a typical lead-magnet setup. */
 const FLOWS = [
     {
         key: "lead",
-        tab: "Website lead to Brevo",
-        payload: '{ "name": "Alex Tan", "email": "alex@example.com", "subscribe": true }',
-        done: "Done: lead delivered and saved in 5 steps",
+        tab: "New enquiry to follow-up",
+        payload: "Sample: Alex from Tan Dental asks for a quote at 11pm",
+        done: "Done: enquiry answered, saved and followed up, while you slept",
         steps: [
-            { key: "form", title: "Website form", detail: "A visitor sends a message", icon: "message" },
-            { key: "api", title: "API route", detail: "Blocks spam, checks the fields", logo: "nextjs.org", icon: "code" },
-            { key: "mail", title: "Brevo email", detail: "Message lands in your inbox", logo: "brevo.com", icon: "mail" },
-            { key: "list", title: "Brevo list", detail: "Opted-in visitors are saved", logo: "brevo.com", icon: "user" },
-            { key: "campaign", title: "Email campaign", detail: "Your newsletter reaches them", icon: "mail" }
+            { key: "form", title: "Website form", detail: "A customer asks for a quote", icon: "message" },
+            { key: "api", title: "Spam check", detail: "Junk and bots filtered out", icon: "shield" },
+            { key: "mail", title: "Lands in your inbox", detail: "With every detail you need to reply", icon: "mail" },
+            { key: "list", title: "Saved to your list", detail: "Never lost in a busy inbox", icon: "user" },
+            { key: "campaign", title: "Automatic follow-up", detail: "Your next offer reaches them", icon: "zap" }
         ]
     },
     {
         key: "kajabi",
-        tab: "Resource access to Kajabi",
-        payload: '{ "name": "Alex Tan", "email": "alex@example.com", "resource": "Free guide" }',
-        done: "Done: contact created and resource unlocked in 5 steps",
+        tab: "Free guide to email list",
+        payload: "Sample: Alex downloads your free guide",
+        done: "Done: a new lead you can sell to, with zero manual work",
         steps: [
-            { key: "form", title: "Resource access form", detail: "A visitor asks for the free resource", icon: "message" },
-            { key: "zap", title: "Zapier trigger", detail: "Catches the new form entry", logo: "zapier.com", icon: "zap" },
-            { key: "contact", title: "Kajabi contact", detail: "Creates or updates the contact", logo: "kajabi.com", icon: "user" },
-            { key: "offer", title: "Kajabi offer", detail: "Tags them and grants access", logo: "kajabi.com", icon: "shield" },
-            { key: "email", title: "Access email", detail: "Login link sent right away", icon: "mail" }
+            { key: "form", title: "Free guide form", detail: "A visitor asks for your guide", icon: "message" },
+            { key: "zap", title: "Captured instantly", detail: "No copy and paste by your team", icon: "zap" },
+            { key: "contact", title: "New contact", detail: "Added to your email marketing", icon: "user" },
+            { key: "offer", title: "Access granted", detail: "The guide unlocks right away", icon: "shield" },
+            { key: "email", title: "Welcome sequence", detail: "Emails that lead to your paid offer", icon: "mail" }
         ]
     }
 ];
@@ -180,7 +178,7 @@ function AutomationDemo() {
 
             <div className="jre-flow-top">
                 <span className="jre-flow-tag">Sample automation</span>
-                <code className="jre-flow-payload" aria-label="Sample test data">{flow.payload}</code>
+                <span className="jre-flow-payload">{flow.payload}</span>
                 <button type="button" className="jre-run" onClick={run} disabled={running}>
                     <Icon name="zap" small /> {step < 0 ? "Run sample" : running ? "Running" : "Run again"}
                 </button>
@@ -219,8 +217,8 @@ export default function Expertise({ go }) {
     return (
         <>
             <div className="jre-head jr-reveal jr-d1">
-                <h2 className="jre-title">The right tools. <em><span className="jre-swash">Real outcomes.</span></em></h2>
-                <p>Practical engineering and purposeful design, built around the way your business actually works.</p>
+                <h2 className="jre-title">Every fix has one job. <em><span className="jre-swash">More profit.</span></em></h2>
+                <p>Pick the problem that costs you the most. Each solution below is already working for a real business.</p>
             </div>
 
             <div className="jre-grid">
@@ -228,21 +226,20 @@ export default function Expertise({ go }) {
                     <div className="jre-collage" aria-hidden="true">
                         {COLLAGE.map(c => <SafeImg key={c.key} srcs={c.srcs} fit={640} alt="" loading="lazy" />)}
                     </div>
-                    <span className="jre-icon jre-icon-sun"><Icon name="code" /></span>
+                    <span className="jre-icon jre-icon-sun"><Icon name="zap" /></span>
                     <div className="jre-featured-body">
-                        <h3>Websites that load fast and convert.</h3>
-                        <p>Custom builds on the platform that fits the business, tuned for speed, SEO and conversion.</p>
+                        <h3>A website that turns visitors into customers.</h3>
+                        <p>Most sites look fine and sell nothing. Yours should answer questions, build trust and ask for the sale on every page.</p>
                         <ul className="jre-points jre-points-light">
-                            <li>Custom themes and layouts, not a reskinned template</li>
-                            <li>Fast pages: optimized images, caching and clean code</li>
-                            <li>SEO basics and analytics in place on launch day</li>
-                            <li>Figma and Canva designs turned into real, responsive pages</li>
-                            <li>Creator setups: Substack newsletters and Linktree pages</li>
-                            <li>Handover notes so your team can edit content</li>
+                            <li>A clear offer and a next step above the fold</li>
+                            <li>Enquiry or booking within one click, on every page</li>
+                            <li>Pages that load fast, so you don't lose people on mobile</li>
+                            <li>Found on Google for the searches your buyers make</li>
+                            <li>You can edit it yourself, no developer needed</li>
+                            <li>Looked after after launch: fast, secure and backed up</li>
                         </ul>
-                        <Logos ids={["wordpress", "shopify", "squarespace", "framer", "react", "next", "figma", "canva", "substack", "linktree"]} light />
                         <button type="button" className="jre-link jre-link-light" onClick={() => go(2)}>
-                            View work <Icon name="arrow-right" small />
+                            See client results <Icon name="arrow-right" small />
                         </button>
                     </div>
                 </article>
@@ -259,14 +256,13 @@ export default function Expertise({ go }) {
                         <Points items={s.points} />
                         {s.payments && (
                             <div className="jre-pay">
-                                <span className="jre-pay-label">Payment options</span>
+                                <span className="jre-pay-label">Your customers can pay with</span>
                                 <Logos ids={s.payments} />
                             </div>
                         )}
-                        <Logos ids={s.tools} />
                         {s.demos && (
                             <button type="button" className="jre-link" onClick={() => go(3)}>
-                                Try the plugin demos <Icon name="arrow-right" small />
+                                Try it live <Icon name="arrow-right" small />
                             </button>
                         )}
                     </article>
@@ -277,18 +273,17 @@ export default function Expertise({ go }) {
                         <div className="jre-service-head">
                             <span className="jre-icon"><Icon name="zap" /></span>
                             <div>
-                                <h3>Automation and APIs</h3>
-                                <p>Connect platforms and move data between the tools you already use.</p>
+                                <h3>Stop doing admin by hand</h3>
+                                <p>Your tools talk to each other, so no lead slips through the cracks.</p>
                             </div>
                         </div>
                         <Points items={[
-                            "Connect forms, email, CRM and spreadsheets with Zapier or direct APIs",
-                            "Resource access and contact forms wired into Kajabi through Zapier",
-                            "Email marketing automation in Mautic and Brevo",
-                            "Chatbot systems that answer questions and capture leads",
-                            "Every flow documented, so you know what runs where"
+                            "New enquiries get an instant reply, even at midnight",
+                            "Free-guide sign-ups go straight into your email marketing",
+                            "A chat assistant answers common questions and captures leads 24/7",
+                            "Hours of copy-paste admin handed to the system, every week",
+                            "Every step documented, so you're never stuck with a black box"
                         ]} />
-                        <Logos ids={["zapier", "kajabi", "mautic", "brevo", "chatbots", "next"]} />
                     </div>
                     <AutomationDemo />
                 </article>

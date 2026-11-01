@@ -41,12 +41,12 @@ const display = localFont({
 });
 
 export const metadata = {
-    title: "Rod Bargayo / Freelance Web Developer",
+    title: "Rod Bargayo / Websites and Systems That Grow Your Business",
     description:
-        "John Rodney Bargayo, freelance web developer in the Philippines. Websites and web apps on WordPress, Shopify, Squarespace, Framer and React, plus custom plugins and automation.",
+        "Rod Bargayo helps business owners win more leads, get paid faster and cut admin with websites, online payments, client portals and automation. See real client results.",
     openGraph: {
-        title: "Rod Bargayo / Freelance Web Developer",
-        description: "Websites, web apps, custom plugins and automation.",
+        title: "Rod Bargayo / Websites and Systems That Grow Your Business",
+        description: "More leads, faster payments, less admin. Real client results.",
         type: "website"
     }
 };

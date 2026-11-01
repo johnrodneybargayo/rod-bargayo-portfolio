@@ -2,10 +2,10 @@ import { BtnIsland, Icon } from "../Icons";
 import SafeImg from "../SafeImg";
 import { SITE, mshot, shot } from "@/lib/data";
 
-/* "Design to build" card: a real site I designed and built, not a stock photo */
-const DESIGN_SHOT = "https://services.podify.com/podcast-launch/";
+/* Result teaser card: a real client site, linked to the case study */
+const RESULT_SHOT = "https://podify.com";
 
-export default function Overview({ go }) {
+export default function Overview({ go, openContact }) {
     return (
         <div className="jrh-grid">
             <article className="jr-card jrh-hero jr-reveal jr-d1">
@@ -14,25 +14,25 @@ export default function Overview({ go }) {
                 <div className="jrh-content">
                     <span className="jrh-badge">
                         <span className="jr-status-dot" aria-hidden="true" />
-                        Freelance web developer · Philippines
+                        For business owners who want results
                     </span>
 
                     <div>
                         <h1 className="jrh-heading">
-                            <span className="jrh-row jrh-row-1"><span className="jrh-row-inner"><span className="jrh-lead">I build</span>digital</span></span>
-                            <span className="jrh-row jrh-row-2"><span className="jrh-row-inner">experiences</span></span>
-                            <span className="jrh-row jrh-row-3"><span className="jrh-row-inner"><span className="jrh-lead">that</span><span className="jrh-pill">work.</span></span></span>
+                            <span className="jrh-row jrh-row-1"><span className="jrh-row-inner"><span className="jrh-lead">More</span>leads.</span></span>
+                            <span className="jrh-row jrh-row-2"><span className="jrh-row-inner">More sales.</span></span>
+                            <span className="jrh-row jrh-row-3"><span className="jrh-row-inner"><span className="jrh-lead">Less</span><span className="jrh-pill">admin.</span></span></span>
                         </h1>
                         <p className="jrh-copy">
-                            Websites and web apps on WordPress, Shopify, Framer and React, plus the plugins and automation behind them.
+                            I build websites, online checkouts and automations that bring in customers, take payments while you sleep and cut the admin that eats your week.
                         </p>
                         <div className="jrh-actions">
                             <button className="jr-btn jr-btn-sun" type="button" onClick={() => go(2)}>
-                                View work
+                                See client results
                                 <BtnIsland />
                             </button>
-                            <button className="jr-btn jr-btn-ghost" type="button" onClick={() => go(3)}>
-                                Try plugin demos
+                            <button className="jr-btn jr-btn-ghost" type="button" onClick={() => openContact("Free growth review")}>
+                                Get a free growth review
                                 <BtnIsland icon="arrow-right" />
                             </button>
                         </div>
@@ -58,26 +58,26 @@ export default function Overview({ go }) {
             </article>
 
             <button className="jr-card jrh-visual jr-reveal jr-d2" type="button" onClick={() => go(2)} >
-                <SafeImg srcs={[shot(DESIGN_SHOT), mshot(DESIGN_SHOT)]} fit={640} alt="" loading="lazy" />
+                <SafeImg srcs={[shot(RESULT_SHOT), mshot(RESULT_SHOT)]} fit={640} alt="" loading="lazy" />
                 <span className="jrh-visual-shade" />
                 <span className="jrh-visual-body">
                     <span>
-                        <span className="jr-label" style={{ color: "#cdeef5" }}>Design to build</span>
-                        <h2>Ideas into<br />interfaces.</h2>
+                        <span className="jr-label" style={{ color: "#cdeef5" }}>Client result / Podify</span>
+                        <h2>One-off orders into<br />recurring revenue.</h2>
                     </span>
                     <span className="jr-round"><Icon name="arrow" small /></span>
                 </span>
             </button>
 
             <article className="jr-card jrh-scope jr-reveal jr-d3">
-                <span className="jr-label">Track record</span>
+                <span className="jr-label">How I work</span>
                 <div>
-                    <h2>20+ <span>projects shipped</span></h2>
-                    <p>Across six platforms, every one fully responsive.</p>
+                    <h2>Profit <span>first. Website second.</span></h2>
+                    <p>Every project starts with one question: where is your business losing customers, time or money?</p>
                     <div className="jrh-steps">
-                        <span>Discover</span>
-                        <span>Build</span>
-                        <span>Launch</span>
+                        <span>Find the leak</span>
+                        <span>Fix it</span>
+                        <span>Measure it</span>
                     </div>
                 </div>
             </article>
