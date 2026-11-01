@@ -5,6 +5,19 @@ Versions follow [Semantic Versioning](https://semver.org/): a fix or tweak to an
 existing feature is a patch (2.1.x), a new feature or a content repositioning is
 a minor (2.x.0).
 
+## [2.1.3] - 2026-11-01
+
+### Added
+- "End chat" button in the chat header, shown once a conversation has started.
+  It asks first ("End this chat?" with Keep chatting / End chat), then resets
+  everything: clears the messages, cancels any pending replies, forgets the
+  saved name, email and phone, leaves the live chat with Rod and clears the
+  live chat's stored visitor data, so the next "Talk to Rod" starts a brand
+  new conversation. The chat returns to the welcome screen.
+
+### Changed
+- Chat header title and subtitle stay on one line on mobile.
+
 ## [2.1.2] - 2026-11-01
 
 ### Fixed

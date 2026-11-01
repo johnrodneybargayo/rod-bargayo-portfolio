@@ -1,6 +1,6 @@
 {
   "name": "rod-bargayo-portfolio",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "private": true,
   "description": "Rod Bargayo portfolio built with Next.js. Contact form and email campaigns through Brevo.",
   "scripts": {

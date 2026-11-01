@@ -1,6 +1,6 @@
 # Rod Bargayo portfolio (Next.js)
 
-Version 2.1.2. Written for business owners: every section leads with results
+Version 2.1.3. Written for business owners: every section leads with results
 (leads, sales, upfront payments, hours saved), not tools. See
 [CHANGELOG.md](CHANGELOG.md) for what changed in each version.
 

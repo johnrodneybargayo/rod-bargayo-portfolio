@@ -193,6 +193,24 @@ function startBrevo(container, onMessage) {
     })(document, window, "BrevoConversations");
 }
 
+/* End chat: tear down the embedded Brevo chat and forget this visitor in Brevo,
+   so the next "Talk to Rod" starts a brand new conversation. */
+function resetBrevo(container) {
+    document.querySelectorAll(`script[src="${SCRIPT_SRC}"]`).forEach(s => s.remove());
+    if (container) container.innerHTML = "";
+    ["BrevoConversations", "BrevoConversationsID", "BrevoConversationsSetup"].forEach(k => {
+        try { delete window[k]; } catch { window[k] = undefined; }
+    });
+    window.__jrBrevoLoaded = false;
+    try {
+        Object.keys(localStorage).filter(k => /brevo|sib|conversations/i.test(k)).forEach(k => localStorage.removeItem(k));
+        Object.keys(sessionStorage).filter(k => /brevo|sib|conversations/i.test(k)).forEach(k => sessionStorage.removeItem(k));
+    } catch {}
+    document.cookie.split(";").map(c => c.split("=")[0].trim()).filter(n => /brevo|sib|conversations/i.test(n)).forEach(n => {
+        document.cookie = `${n}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    });
+}
+
 export default function ChatWidget({ ready, go, section = 0 }) {
     const [open, setOpen] = useState(false);
     const [view, setView] = useState("bot"); /* bot | live */
@@ -207,6 +225,8 @@ export default function ChatWidget({ ready, go, section = 0 }) {
     const [typing, setTyping] = useState(false);
     const [thread, setThread] = useState([]);
     const [greetTime, setGreetTime] = useState("");
+    /* "End chat" asks once before clearing everything */
+    const [confirmEnd, setConfirmEnd] = useState(false);
     const liveRef = useRef(null);
     const inputRef = useRef(null);
     const bodyRef = useRef(null);
@@ -216,6 +236,7 @@ export default function ChatWidget({ ready, go, section = 0 }) {
     const threadRef = useRef([]);
 
     useEffect(() => { openRef.current = open; }, [open]);
+    useEffect(() => { if (!open) setConfirmEnd(false); }, [open]);
     useEffect(() => { threadRef.current = thread; }, [thread]);
     useEffect(() => () => timers.current.forEach(clearTimeout), []);
     const later = (fn, ms) => timers.current.push(setTimeout(fn, ms));
@@ -437,8 +458,31 @@ export default function ChatWidget({ ready, go, section = 0 }) {
         answer(match(msg));
     };
 
+    /* End chat: back to a fresh start, as if the visitor had never chatted */
+    const endChat = () => {
+        timers.current.forEach(clearTimeout);
+        timers.current = [];
+        if (view === "live" || window.__jrBrevoLoaded) resetBrevo(liveRef.current);
+        try { localStorage.removeItem(LIVE_KEY); localStorage.removeItem(VISITOR_KEY); } catch {}
+        sentContext.current = false;
+        threadRef.current = [];
+        setThread([]);
+        setCollect(null);
+        setText("");
+        setTyping(false);
+        setUnread(0);
+        setTip(null);
+        setPose("happy");
+        setGreetTime(timeNow());
+        setConfirmEnd(false);
+        setView("bot");
+        later(() => setPose("present"), 1800);
+        later(() => inputRef.current?.focus({ preventScroll: true }), 300);
+    };
+
     if (!ready) return null;
     const lastBot = [...thread].reverse().find(m => m.from === "bot");
+    const hasChat = thread.length > 0 || view === "live" || !!collect;
 
     return (
         <div className={`jrx${open ? " is-open" : ""}`}>
@@ -453,8 +497,26 @@ export default function ChatWidget({ ready, go, section = 0 }) {
                     {view !== "bot"
                         ? <button type="button" className="jrx-icon-btn" onClick={() => setView("bot")} aria-label="Back to quick answers"><Icon name="arrow-right" className="jrx-flip" /></button>
                         : <button type="button" className="jrx-icon-btn" onClick={() => setOpen(false)} aria-label="Minimize chat"><Icon name="minus" /></button>}
+                    {hasChat && (
+                        <button type="button" className="jrx-end-btn" onClick={() => setConfirmEnd(true)} aria-haspopup="true" aria-expanded={confirmEnd}>
+                            End chat
+                        </button>
+                    )}
                     <button type="button" className="jrx-icon-btn" onClick={() => setOpen(false)} aria-label="Close chat"><Icon name="close" /></button>
                 </header>
+
+                {confirmEnd && (
+                    <div className="jrx-end" role="alertdialog" aria-labelledby="jrx-end-title" aria-describedby="jrx-end-desc">
+                        <div>
+                            <strong id="jrx-end-title">End this chat?</strong>
+                            <span id="jrx-end-desc">Your messages will be cleared and the chat starts fresh.</span>
+                        </div>
+                        <div className="jrx-end-actions">
+                            <button type="button" className="jrx-end-keep" onClick={() => setConfirmEnd(false)} autoFocus>Keep chatting</button>
+                            <button type="button" className="jrx-end-yes" onClick={endChat}>End chat</button>
+                        </div>
+                    </div>
+                )}
 
                 {/* live chat: Brevo Conversations is embedded into this block */}
                 <div className="jrx-live" hidden={view !== "live"}>
