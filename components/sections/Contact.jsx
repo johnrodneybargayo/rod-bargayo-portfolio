@@ -38,7 +38,7 @@ export default function Contact({ openContact }) {
                 <div className="jrc-sign">
                     <span className="jrc-person">
                         <img src={SITE.avatar} alt="" width={56} height={56} loading="lazy" />
-                        <span><strong>{SITE.fullName}</strong>Co-founder, Aura Creo / Cebu, Philippines</span>
+                        <span><strong>{SITE.fullName}</strong>Web developer and marketer / Cebu, Philippines</span>
                     </span>
                     <span className="jrc-social">
                         {SOCIAL.map(s => (

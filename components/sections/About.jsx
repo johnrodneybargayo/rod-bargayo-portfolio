@@ -66,8 +66,8 @@ export default function About({ openContact }) {
                         <p className="jra-kicker">Why work with me</p>
                         <h3>I think like an <em>owner.</em></h3>
                         <p>
-                            I&apos;m Rod, co-founder of Aura Creo in Cebu. I run a business too, so I judge every website
-                            by what it brings in: leads, sales and hours saved. Developer and marketer, in one person.
+                            I&apos;m Rod, based in Cebu, Philippines. I judge every website by what it brings in
+                            for the business: leads, sales and hours saved. Developer and marketer, in one person.
                         </p>
                         <button className="jr-btn jra-cta" type="button" onClick={() => openContact()}>
                             Let&apos;s talk

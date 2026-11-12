@@ -17,7 +17,7 @@
     "react-dom": "19.3.1"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": "24.x"
   },
   "browserslist": [
     "chrome 111",
