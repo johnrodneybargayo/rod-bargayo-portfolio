@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "wordpress-penetration-testing",
+  "owner": "sickn33",
+  "repo": "antigravity-awesome-skills",
+  "path": "plugins/agentic-awesome-skills-claude/skills/wordpress-penetration-testing",
+  "branch": "main",
+  "sha": "aca590bb3aac6a804626beae2dffb1674f7f8224",
+  "source": "manual"
+}

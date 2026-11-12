@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "design-schema",
+  "owner": "rdimascio",
+  "repo": "supabase-marketplace",
+  "path": "plugins/database-operations/.claude/skills/design-schema",
+  "branch": "main",
+  "sha": "1e0ec2a0601e300adeefcac2302317580d6e2ea5",
+  "source": "manual"
+}

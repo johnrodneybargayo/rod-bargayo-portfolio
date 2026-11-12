@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "wordpress-plugin-development",
+  "owner": "jantoniofc",
+  "repo": "skillsbank",
+  "path": "plugins/antigravity-awesome-skills-claude/skills/wordpress-plugin-development",
+  "branch": "main",
+  "sha": "a7cb97efb2a7da4e8776937d1a1c3d9ed40d16a0",
+  "source": "manual"
+}
